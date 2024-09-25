@@ -1,35 +1,75 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useState, useEffect } from 'react'
+import './App.css'
+
+interface Project {
+  id: number;
+  title: string;
+  description: string;
+  image: string;
+}
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [projects, setProjects] = useState<Project[]>([]);
+
+  useEffect(() => {
+    // Simulating fetching projects from an API
+    setProjects([
+      { id: 1, title: "Project Alpha", description: "A cutting-edge web application", image: "https://via.placeholder.com/300x200" },
+      { id: 2, title: "Project Beta", description: "An innovative mobile app", image: "https://via.placeholder.com/300x200" },
+      { id: 3, title: "Project Gamma", description: "A powerful data analysis tool", image: "https://via.placeholder.com/300x200" },
+    ]);
+  }, []);
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center">
-      <div className="flex space-x-4 mb-8">
-        <a href="https://vitejs.dev" target="_blank" className="hover:opacity-80">
-          <img src={viteLogo} className="h-24 w-24" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank" className="hover:opacity-80">
-          <img src={reactLogo} className="h-24 w-24 animate-spin" alt="React logo" />
-        </a>
-      </div>
-      <h1 className="text-4xl font-bold mb-4 text-gray-800">Vite + React</h1>
-      <div className="bg-white p-8 rounded-lg shadow-md">
-        <button 
-          onClick={() => setCount((count) => count + 1)}
-          className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mb-4"
-        >
-          count is {count}
-        </button>
-        <p className="text-gray-600">
-          Edit <code className="bg-gray-200 p-1 rounded">src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="mt-8 text-gray-500">
-        Click on the Vite and React logos to learn more
-      </p>
+    <div className="app">
+      <header className="header">
+        <nav>
+          <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </nav>
+      </header>
+
+      <main>
+        <section id="home" className="hero">
+          <h1 className="animate-fade-in">Ian's Tech Universe</h1>
+          <p className="animate-fade-in-delay">Crafting digital experiences that inspire</p>
+        </section>
+
+        <section id="about" className="about">
+          <h2>About Me</h2>
+          <p>I'm a passionate software developer with a keen eye for design and a drive for innovation. With expertise in modern web technologies and a commitment to clean, efficient code, I bring ideas to life in the digital realm.</p>
+        </section>
+
+        <section id="projects" className="projects">
+          <h2>Featured Projects</h2>
+          <div className="project-grid">
+            {projects.map((project) => (
+              <div key={project.id} className="project-card">
+                <img src={project.image} alt={project.title} />
+                <h3>{project.title}</h3>
+                <p>{project.description}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section id="contact" className="contact">
+          <h2>Get in Touch</h2>
+          <form onSubmit={(e) => { e.preventDefault(); alert('Message sent!'); }}>
+            <input type="email" placeholder="Your email" required />
+            <textarea placeholder="Your message" required></textarea>
+            <button type="submit">Send</button>
+          </form>
+        </section>
+      </main>
+
+      <footer>
+        <p>&copy; 2023 Ian's Tech Universe. All rights reserved.</p>
+      </footer>
     </div>
   )
 }
