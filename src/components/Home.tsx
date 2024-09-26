@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { BlogPost, Project } from '../types';
 
@@ -8,6 +8,30 @@ interface HomeProps {
 }
 
 const Home: React.FC<HomeProps> = ({ blogPosts, projects }) => {
+  useEffect(() => {
+    // Smooth scrolling for anchor links
+    const handleClick = (e: Event) => {
+      const target = e.target as HTMLAnchorElement;
+      if (target.hash) {
+        e.preventDefault();
+        const element = document.querySelector(target.hash);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }
+    };
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', handleClick);
+    });
+
+    return () => {
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.removeEventListener('click', handleClick);
+      });
+    };
+  }, []);
+
   return (
     <div className="App">
       <header className="header">
