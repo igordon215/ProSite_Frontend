@@ -46,8 +46,7 @@ function App() {
 
   return (
     <Router>
-      <div className="app-container">
-        <img src="/logo.png" alt="IG Codes Logo" className="logo" />
+      <div className="App">
         <Routes>
           <Route path="/" element={<Home blogPosts={blogPosts} projects={projects} />} />
           <Route path="/blog/:id" element={<BlogPost />} />

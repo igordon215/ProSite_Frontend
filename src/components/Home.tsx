@@ -11,6 +11,9 @@ const Home: React.FC<HomeProps> = ({ blogPosts, projects }) => {
   return (
     <div className="App">
       <header className="header">
+        <div className="logo-container">
+          <img src="/logo.png" alt="IG Codes Logo" className="logo" />
+        </div>
         <nav>
           <ul>
             <li><a href="#home">Home</a></li>
@@ -24,7 +27,6 @@ const Home: React.FC<HomeProps> = ({ blogPosts, projects }) => {
 
       <main>
         <section id="home" className="hero">
-          <h1>Innovate with Ian</h1>
           <p className="tagline">Elevating Businesses through Cutting-Edge Software Solutions</p>
           <a href="#contact" className="cta-button">Let's Build the Future Together</a>
         </section>
@@ -90,7 +92,7 @@ const Home: React.FC<HomeProps> = ({ blogPosts, projects }) => {
       </main>
 
       <footer>
-        <p>&copy; 2023 Ian's Tech Innovation Studio. Empowering businesses through advanced software solutions.</p>
+        <p>&copy; 2023 IG Codes. Empowering businesses through advanced software solutions.</p>
       </footer>
     </div>
   );
