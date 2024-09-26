@@ -51,7 +51,10 @@ const Home: React.FC<HomeProps> = ({ blogPosts, projects }) => {
 
       <main>
         <section id="home" className="hero">
-          <p className="tagline">Elevating Businesses through Cutting-Edge Software Solutions</p>
+          <h1 className="welcome-message">Hi, I'm Ian Gordon</h1>
+          <p className="intro">Full-stack developer and UX/UI designer based in Greater Philadelphia, PA. I specialize in creating engaging designs and solving complex problems through innovative technology solutions.
+          <br /> <br />With a passion for both front-end aesthetics and back-end functionality, I bring a holistic approach to web development. My goal is to craft user-centric experiences that are not only visually appealing but also intuitive and efficient.
+</p>
           <a href="#contact" className="cta-button">Let's Build the Future Together</a>
         </section>
 
