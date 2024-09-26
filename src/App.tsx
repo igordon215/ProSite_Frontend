@@ -46,11 +46,14 @@ function App() {
 
   return (
     <Router>
-      <Routes>
-        <Route path="/" element={<Home blogPosts={blogPosts} projects={projects} />} />
-        <Route path="/blog/:id" element={<BlogPost />} />
-        <Route path="/project/:id" element={<Project />} />
-      </Routes>
+      <div className="app-container">
+        <img src="/logo.png" alt="IG Codes Logo" className="logo" />
+        <Routes>
+          <Route path="/" element={<Home blogPosts={blogPosts} projects={projects} />} />
+          <Route path="/blog/:id" element={<BlogPost />} />
+          <Route path="/project/:id" element={<Project />} />
+        </Routes>
+      </div>
     </Router>
   );
 }

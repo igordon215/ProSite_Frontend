@@ -36,8 +36,25 @@ body {
   min-height: 100vh;
 }
 
+/* Updated styles for the logo */
+.app-container {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+}
+
+.logo {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 200px; 
+  height: auto;
+  z-index: 1001;
+}
+
+/* Adjust header padding to accommodate larger logo */
 .header {
-  padding: 20px 0;
+  padding: 100px 0 20px; /* Increased top padding from 80px to 100px */
   position: sticky;
   top: 0;
   background-color: rgba(255, 255, 255, 0.8);
@@ -46,6 +63,7 @@ body {
   width: 100%;
 }
 
+/* Rest of the CSS remains unchanged */
 nav ul {
   display: flex;
   justify-content: center;
@@ -244,5 +262,15 @@ footer {
 
   .project-grid, .blog-grid {
     grid-template-columns: 1fr;
+  }
+
+  /* Adjust logo size for mobile */
+  .logo {
+    width: 150px; /* Increased from 80px to 150px for mobile */
+  }
+
+  /* Adjust header padding for mobile */
+  .header {
+    padding: 80px 0 20px; /* Increased from 60px to 80px for mobile */
   }
 }
