@@ -6,6 +6,7 @@ import BlogPost from './components/BlogPost';
 import Project from './components/Project';
 import { BlogPost as BlogPostType, Project as ProjectType } from './types';
 import './App.css';
+import './animatedBackground.css'; // Import the new CSS file
 
 function App() {
   const [blogPosts, setBlogPosts] = useState<BlogPostType[]>([]);
@@ -47,11 +48,21 @@ function App() {
   return (
     <Router>
       <div className="App">
-        <Routes>
-          <Route path="/" element={<Home blogPosts={blogPosts} projects={projects} />} />
-          <Route path="/blog/:id" element={<BlogPost />} />
-          <Route path="/project/:id" element={<Project />} />
-        </Routes>
+        {/* Animated Background */}
+        <ul className="background">
+          {[...Array(30)].map((_, index) => (
+            <li key={index}></li>
+          ))}
+        </ul>
+        
+        {/* Main Content */}
+        <div className="content">
+          <Routes>
+            <Route path="/" element={<Home blogPosts={blogPosts} projects={projects} />} />
+            <Route path="/blog/:id" element={<BlogPost />} />
+            <Route path="/project/:id" element={<Project />} />
+          </Routes>
+        </div>
       </div>
     </Router>
   );
