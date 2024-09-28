@@ -35,18 +35,23 @@ const Home: React.FC<HomeProps> = ({ blogPosts, projects }) => {
   return (
     <div className="App">
       <header className="header">
+        <div className="nav-container">
+          <div className="nav-logo">
+            <img src="/logo.png" alt="IG Codes Logo" className="small-logo" />
+          </div>
+          <nav>
+            <ul>
+              <li><a href="#home">Home</a></li>
+              <li><a href="#about">About</a></li>
+              <li><a href="#projects">Projects</a></li>
+              <li><a href="#blog">Blog</a></li>
+              <li><a href="#contact">Contact</a></li>
+            </ul>
+          </nav>
+        </div>
         <div className="logo-container">
           <img src="/logo.png" alt="IG Codes Logo" className="logo" />
         </div>
-        <nav>
-          <ul>
-            <li><a href="#home">Home</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#projects">Projects</a></li>
-            <li><a href="#blog">Blog</a></li>
-            <li><a href="#contact">Contact</a></li>
-          </ul>
-        </nav>
       </header>
 
       <main>
@@ -54,7 +59,7 @@ const Home: React.FC<HomeProps> = ({ blogPosts, projects }) => {
           <h1 className="welcome-message">Hi, I'm Ian Gordon</h1>
           <p className="intro">Full-stack developer and UX/UI designer based in Greater Philadelphia, PA. I specialize in creating engaging designs and solving complex problems through innovative technology solutions.
           <br /> <br />With a passion for both front-end aesthetics and back-end functionality, I bring a holistic approach to web development. My goal is to craft user-centric experiences that are not only visually appealing but also intuitive and efficient.
-</p>
+          </p>
           <a href="#contact" className="cta-button">Let's Build the Future Together</a>
         </section>
 
