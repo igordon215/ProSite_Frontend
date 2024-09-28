@@ -8,13 +8,13 @@ const TypedWelcome: React.FC = () => {
   const [charIndex, setCharIndex] = useState(0);
 
   // Adjustable speed parameters (in milliseconds)
-  const TYPING_SPEED = 700;  // Speed for typing each character
-  const DELETING_SPEED = 300; // Speed for deleting each character
+  const TYPING_SPEED = 400;  // Speed for typing each character
+  const DELETING_SPEED = 250; // Speed for deleting each character
   const PAUSE_DURATION = 4000; // Duration to pause after typing a full word
 
   const [typingSpeed, setTypingSpeed] = useState(TYPING_SPEED);
 
-  const welcomeMessages = ['Welcome', 'Bienvenido', 'مرحباً', 'Bienvenu', 'Willkommen'];
+  const welcomeMessages = ['Welcome!', '¡Bienvenido!', 'Bienvenu!', 'Willkommen!', 'مرحباً', '欢迎', 'Добро пожаловать', '환영', 'Witaj!', 'Bem-vindo!', 'いらっしゃいませ', 'Chào mừng'];
 
   const getCurrentMessage = useCallback(() => {
     return welcomeMessages[loopNum % welcomeMessages.length];
