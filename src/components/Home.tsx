@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { BlogPost, Project } from '../types';
+import TypedWelcome from './TypedWelcome';
 
 interface HomeProps {
   blogPosts: BlogPost[];
@@ -56,7 +57,7 @@ const Home: React.FC<HomeProps> = ({ blogPosts, projects }) => {
 
       <main className="main-content">
         <section id="home" className="hero">
-          <h1 className="welcome-message">Hi, I'm Ian Gordon</h1>
+          <TypedWelcome />
           <p className="intro">Full-stack developer and UX/UI designer based in Greater Philadelphia, PA. I specialize in creating engaging designs and solving complex problems through innovative technology solutions.
           <br /> <br />With a passion for both front-end aesthetics and back-end functionality, I bring a holistic approach to web development. My goal is to craft user-centric experiences that are not only visually appealing but also intuitive and efficient.
           </p>

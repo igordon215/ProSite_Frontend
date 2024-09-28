@@ -168,16 +168,6 @@ nav ul li a:hover {
   align-items: center;
 }
 
-.welcome-message {
-  font-size: 48px;
-  font-weight: 700;
-  color: var(--text-color);
-  margin-bottom: 20px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-}
-
 .intro {
   max-width: 800px;
   margin: 0 auto;
@@ -369,10 +359,6 @@ footer {
 @media (max-width: 768px) {
   :root {
     --nav-height: 100px;
-  }
-
-  .welcome-message {
-    font-size: 36px;
   }
 
   .tagline {

@@ -1,0 +1,54 @@
+.welcome-message {
+  display: inline-block;
+  position: relative;
+  font-size: 90px;
+  font-weight: 700;
+  color: var(--text-color);
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  height: 60px; /* Set a fixed height */
+  line-height: 60px; /* Match the height for vertical centering */
+}
+
+.welcome-message-container {
+  min-height: 60px; /* Match the height of .welcome-message */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.welcome-message .cursor {
+  display: inline-block;
+  width: 7px;
+  height: 70px;
+  background-color: var(--text-color);
+  margin-left: 5px;
+  animation: blink 0.9s infinite;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+@keyframes blink {
+  0% { opacity: 0; }
+  50% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@media (max-width: 768px) {
+  .welcome-message {
+    font-size: 36px;
+    height: 45px; /* Adjust height for smaller screens */
+    line-height: 45px;
+  }
+
+  .welcome-message-container {
+    min-height: 45px; /* Match the new height */
+  }
+
+  .welcome-message .cursor {
+    height: 40px;
+  }
+}
