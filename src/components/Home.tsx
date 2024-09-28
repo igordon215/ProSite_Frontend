@@ -54,7 +54,7 @@ const Home: React.FC<HomeProps> = ({ blogPosts, projects }) => {
         </div>
       </header>
 
-      <main>
+      <main className="main-content">
         <section id="home" className="hero">
           <h1 className="welcome-message">Hi, I'm Ian Gordon</h1>
           <p className="intro">Full-stack developer and UX/UI designer based in Greater Philadelphia, PA. I specialize in creating engaging designs and solving complex problems through innovative technology solutions.
