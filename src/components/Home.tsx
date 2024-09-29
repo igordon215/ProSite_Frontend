@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom';
 import { BlogPost, Project } from '../types';
 import TypedWelcome from './TypedWelcome';
 import AboutMe from './AboutMe';
-import IntroSection from './IntroSection'; // Import the new IntroSection component
+import IntroSection from './IntroSection';
+import Projects from './Projects';
 
 interface HomeProps {
   blogPosts: BlogPost[];
@@ -62,33 +63,14 @@ const Home: React.FC<HomeProps> = ({ blogPosts, projects }) => {
           <div style={{ marginTop: '-100px' }}>
             <TypedWelcome />
           </div>
-          <IntroSection /> {/* Replace the existing intro section with the new IntroSection component */}
+          <IntroSection />
         </section>
 
         <section id="about" className="about">
           <AboutMe />
         </section>
 
-        <section id="projects" className="projects">
-          <h2>Innovative Solutions Showcase</h2>
-          <div className="project-grid">
-            {projects.slice(0, 3).map((project) => (
-              <div key={project.id} className="project-card">
-                <h3>{project.name}</h3>
-                <p>{project.description}</p>
-                {project.technologies && project.technologies.length > 0 && (
-                  <div className="tech-stack">
-                    {project.technologies.map((tech, index) => (
-                      <span key={index} className="tech-tag">{tech}</span>
-                    ))}
-                  </div>
-                )}
-                <Link to={`/project/${project.id}`} className="view-more">View Project</Link>
-              </div>
-            ))}
-          </div>
-          <Link to="/projects" className="view-more">Discover More Groundbreaking Projects</Link>
-        </section>
+        <Projects projects={projects} />
 
         <section id="blog" className="blog">
           <h2>Tech Insights & Industry Trends</h2>
