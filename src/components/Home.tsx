@@ -60,7 +60,7 @@ const Home: React.FC<HomeProps> = ({ blogPosts, projects }) => {
           <TypedWelcome />
           <div className="intro-container">
             <p className="bold-intro">Hi, I'm Ian Gordon</p>
-            <p className="intro">Full-stack developer, UX/UI designer based out of the Greater Philadelphia, PA area.<br /> I specialize in creating engaging designs and solving complex problems through innovative technology solutions.
+            <p className="intro intro-background">Full-stack developer, UX/UI designer based out of the Greater Philadelphia, PA area.<br /> I specialize in creating engaging designs and solving complex problems through innovative technology solutions.
             <br /> <br />With a passion for both front-end aesthetics and back-end functionality, I bring a holistic approach to web development. My goal is to craft user-centric experiences that are not only visually appealing but also intuitive and efficient.
             </p>
           </div>

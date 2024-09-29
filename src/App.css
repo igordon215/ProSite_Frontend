@@ -194,6 +194,12 @@ nav ul li a:hover {
   color: #ffffff; /* Updated color for better visibility */
 }
 
+.intro-background {
+  background-color: rgba(0, 0, 0, 0.419); /* Light grey with 10% opacity */
+  padding: 12px;
+  border-radius: 20px;
+}
+
 .tagline {
   font-size: 28px;
   color: var(--text-color);
