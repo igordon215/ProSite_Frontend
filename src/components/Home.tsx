@@ -2,7 +2,8 @@ import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { BlogPost, Project } from '../types';
 import TypedWelcome from './TypedWelcome';
-import AboutMe from './AboutMe'; // Import the new AboutMe component
+import AboutMe from './AboutMe';
+import IntroSection from './IntroSection'; // Import the new IntroSection component
 
 interface HomeProps {
   blogPosts: BlogPost[];
@@ -61,17 +62,11 @@ const Home: React.FC<HomeProps> = ({ blogPosts, projects }) => {
           <div style={{ marginTop: '-100px' }}>
             <TypedWelcome />
           </div>
-          <div className="intro-container">
-            <p className="bold-intro">Hi, I'm Ian Gordon</p>
-            <p className="intro intro-background">Full-stack developer, UX/UI designer based out of the Greater Philadelphia, PA area.<br /> I specialize in creating engaging designs and solving complex problems through innovative technology solutions.
-            <br /> <br />With a passion for both front-end aesthetics and back-end functionality, I bring a holistic approach to web development. My goal is to craft user-centric experiences that are not only visually appealing but also intuitive and efficient.
-            </p>
-          </div>
-          <a href="#contact" className="cta-button">Let's Build the Future Together</a>
+          <IntroSection /> {/* Replace the existing intro section with the new IntroSection component */}
         </section>
 
         <section id="about" className="about">
-          <AboutMe /> {/* Replace the existing about section with the new AboutMe component */}
+          <AboutMe />
         </section>
 
         <section id="projects" className="projects">
