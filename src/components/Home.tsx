@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { BlogPost, Project } from '../types';
 import TypedWelcome from './TypedWelcome';
+import AboutMe from './AboutMe'; // Import the new AboutMe component
 
 interface HomeProps {
   blogPosts: BlogPost[];
@@ -50,14 +51,14 @@ const Home: React.FC<HomeProps> = ({ blogPosts, projects }) => {
             </ul>
           </nav>
         </div>
-        <div className="logo-container" style={{ marginTop: '-20px' }}> {/* Adjust this value to move up or down */}
+        <div className="logo-container" style={{ marginTop: '-20px' }}>
           <img src="/logo.png" alt="IG Codes Logo" className="logo" />
         </div>
       </header>
 
       <main className="main-content">
         <section id="home" className="hero">
-          <div style={{ marginTop: '-100px' }}> {/* Adjust this value to move up or down */}
+          <div style={{ marginTop: '-100px' }}>
             <TypedWelcome />
           </div>
           <div className="intro-container">
@@ -70,16 +71,7 @@ const Home: React.FC<HomeProps> = ({ blogPosts, projects }) => {
         </section>
 
         <section id="about" className="about">
-          <h2>Transforming Ideas into Digital Realities</h2>
-          <p>As a passionate software architect and developer, I specialize in creating bespoke solutions that drive business growth and user engagement. My expertise includes:</p>
-          <ul className="skills-list">
-            <li>Scalable Web Applications</li>
-            <li>Cross-Platform Mobile Development</li>
-            <li>Cloud-Native Architectures</li>
-            <li>AI-Powered Software Solutions</li>
-            <li>Blockchain Integration</li>
-          </ul>
-          <p>With a proven track record of delivering innovative projects, I'm here to turn your vision into a technological masterpiece.</p>
+          <AboutMe /> {/* Replace the existing about section with the new AboutMe component */}
         </section>
 
         <section id="projects" className="projects">
