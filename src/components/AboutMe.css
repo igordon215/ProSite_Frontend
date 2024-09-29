@@ -65,3 +65,8 @@
     font-size: 0.6rem;
   }
 }
+
+/* New class for heading color */
+.heading-color {
+  color: #F54E37;
+}

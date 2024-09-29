@@ -23,7 +23,7 @@ const AboutMe: React.FC = () => {
     <div className="my-8">
       <div className="mb-8">
         <div className="h2-container mb-4">
-          <h2 className="text-3xl font-bold text-center text-orange-500">About Me</h2>
+          <h2 className="text-3xl font-bold text-center heading-color">About Me</h2>
         </div>
         <div className="flex items-center p-6 intro intro-background">
           <img 
@@ -45,7 +45,7 @@ const AboutMe: React.FC = () => {
 
       <div>
         <div className="h2-container mb-4">
-          <h2 className="text-3xl font-bold text-center text-orange-500">Experience</h2>
+          <h2 className="text-3xl font-bold text-center heading-color">Experience</h2>
         </div>
         <div className="p-6 intro intro-background">
           <div className="tech-stack-scroll-container mb-4">
