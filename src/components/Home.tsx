@@ -50,14 +50,16 @@ const Home: React.FC<HomeProps> = ({ blogPosts, projects }) => {
             </ul>
           </nav>
         </div>
-        <div className="logo-container">
+        <div className="logo-container" style={{ marginTop: '-20px' }}> {/* Adjust this value to move up or down */}
           <img src="/logo.png" alt="IG Codes Logo" className="logo" />
         </div>
       </header>
 
       <main className="main-content">
         <section id="home" className="hero">
-          <TypedWelcome />
+          <div style={{ marginTop: '-100px' }}> {/* Adjust this value to move up or down */}
+            <TypedWelcome />
+          </div>
           <div className="intro-container">
             <p className="bold-intro">Hi, I'm Ian Gordon</p>
             <p className="intro intro-background">Full-stack developer, UX/UI designer based out of the Greater Philadelphia, PA area.<br /> I specialize in creating engaging designs and solving complex problems through innovative technology solutions.
