@@ -5,6 +5,7 @@ import TypedWelcome from './TypedWelcome';
 import AboutMe from './AboutMe';
 import IntroSection from './IntroSection';
 import Projects from './Projects';
+import Login from './Login';
 
 interface HomeProps {
   blogPosts: BlogPost[];
@@ -101,6 +102,8 @@ const Home: React.FC<HomeProps> = ({ blogPosts, projects }) => {
       <footer>
         <p>&copy; 2023 IG Codes. Empowering businesses through advanced software solutions.</p>
       </footer>
+
+      <Login />
     </div>
   );
 };

@@ -1,12 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import { getAllBlogPosts, getAllProjects, handleApiError } from './api';
 import Home from './components/Home';
 import BlogPost from './components/BlogPost';
 import Project from './components/Project';
+import AdminDashboard from './components/AdminDashboard';
 import { BlogPost as BlogPostType, Project as ProjectType } from './types';
+import { AuthProvider, useAuth } from './context/AuthContext';
 import './App.css';
 import './animatedBackground.css';
+
+// ProtectedRoute component
+const ProtectedRoute: React.FC<{ element: React.ReactElement }> = ({ element }) => {
+  const { isAuthenticated } = useAuth();
+  return isAuthenticated ? element : <Navigate to="/" />;
+};
 
 function App() {
   const [blogPosts, setBlogPosts] = useState<BlogPostType[]>([]);
@@ -46,27 +54,30 @@ function App() {
   }
 
   return (
-    <Router>
-      <div className="App">
-        {/* Animated Background */}
-        <ul className="background">
-          {[...Array(30)].map((_, index) => (
-            <li key={index}></li>
-          ))}
-        </ul>
-        
-        {/* Main Content */}
-        <div className="main-content">
-          <div className="content">
-            <Routes>
-              <Route path="/" element={<Home blogPosts={blogPosts} projects={projects} />} />
-              <Route path="/blog/:id" element={<BlogPost />} />
-              <Route path="/project/:id" element={<Project />} />
-            </Routes>
+    <AuthProvider>
+      <Router>
+        <div className="App">
+          {/* Animated Background */}
+          <ul className="background">
+            {[...Array(30)].map((_, index) => (
+              <li key={index}></li>
+            ))}
+          </ul>
+          
+          {/* Main Content */}
+          <div className="main-content">
+            <div className="content">
+              <Routes>
+                <Route path="/" element={<Home blogPosts={blogPosts} projects={projects} />} />
+                <Route path="/blog/:id" element={<BlogPost />} />
+                <Route path="/project/:id" element={<Project />} />
+                <Route path="/admin" element={<ProtectedRoute element={<AdminDashboard />} />} />
+              </Routes>
+            </div>
           </div>
         </div>
-      </div>
-    </Router>
+      </Router>
+    </AuthProvider>
   );
 }
 
