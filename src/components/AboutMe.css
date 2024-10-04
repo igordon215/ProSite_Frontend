@@ -1,0 +1,72 @@
+/* AboutMe.css */
+
+.tech-stack-scroll-container {
+  width: 80%;
+  max-width: 800px;
+  margin: 0 auto;
+  overflow: hidden;
+  padding: 1rem 0;
+}
+
+.tech-stack-scroll-inner {
+  display: flex;
+  width: max-content;
+  animation: scroll 65s linear infinite;
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.tech-stack-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 1rem;
+}
+
+.tech-stack-image {
+  height: 4rem;
+  width: auto;
+  object-fit: contain;
+}
+
+.tech-stack-name {
+  font-size: 0.7rem;
+  margin-top: 0.25rem;
+  text-align: center;
+  color: #ffffff;
+}
+
+/* Ensure smooth scrolling */
+.tech-stack-scroll-inner {
+  will-change: transform;
+}
+
+/* Pause animation on hover */
+.tech-stack-scroll-container:hover .tech-stack-scroll-inner {
+  animation-play-state: paused;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .tech-stack-scroll-container {
+    width: 90%;
+  }
+  .tech-stack-image {
+    height: 3rem;
+  }
+  .tech-stack-name {
+    font-size: 0.6rem;
+  }
+}
+
+/* New class for heading color */
+.heading-color {
+  color: #F54E37;
+}
