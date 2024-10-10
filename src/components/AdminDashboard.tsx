@@ -154,6 +154,11 @@ const AdminDashboard: React.FC = () => {
     navigate('/');
   };
 
+  const formatDate = (dateString: string) => {
+    const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+    return new Date(dateString).toLocaleDateString(undefined, options);
+  };
+
   return (
     <div className="admin-dashboard">
       <h1>Admin Dashboard</h1>
@@ -164,11 +169,16 @@ const AdminDashboard: React.FC = () => {
         <h2>Projects</h2>
         <ul className="item-list">
           {projects.map(project => (
-            <li key={project.id}>
-              <span>{project.name}</span>
-              <div>
-                <button onClick={() => setEditingProject(project)}>Edit</button>
-                <button onClick={() => handleDeleteProject(project.id)}>Delete</button>
+            <li key={project.id} className="item">
+              <div className="item-content">
+                <div className="item-info">
+                  <span className="item-name">{project.name}</span>
+                  <span className="item-date">Created: {formatDate(project.createdAt)}</span>
+                </div>
+                <div className="item-actions">
+                  <button onClick={() => setEditingProject(project)}>Edit</button>
+                  <button onClick={() => handleDeleteProject(project.id)}>Delete</button>
+                </div>
               </div>
             </li>
           ))}
@@ -243,11 +253,16 @@ const AdminDashboard: React.FC = () => {
         <h2>Blog Posts</h2>
         <ul className="item-list">
           {blogPosts.map(post => (
-            <li key={post.id}>
-              <span>{post.title}</span>
-              <div>
-                <button onClick={() => setEditingBlogPost(post)}>Edit</button>
-                <button onClick={() => handleDeleteBlogPost(post.id)}>Delete</button>
+            <li key={post.id} className="item">
+              <div className="item-content">
+                <div className="item-info">
+                  <span className="item-name">{post.title}</span>
+                  <span className="item-date">Created: {formatDate(post.createdAt)}</span>
+                </div>
+                <div className="item-actions">
+                  <button onClick={() => setEditingBlogPost(post)}>Edit</button>
+                  <button onClick={() => handleDeleteBlogPost(post.id)}>Delete</button>
+                </div>
               </div>
             </li>
           ))}
