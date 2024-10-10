@@ -13,7 +13,7 @@ import {
   handleApiError
 } from '../api';
 import { Project, BlogPost } from '../types';
-import './AdminDashboard.css'; // We'll create this file next
+import './AdminDashboard.css';
 
 const AdminDashboard: React.FC = () => {
   const { isAuthenticated, logout } = useAuth();
@@ -88,7 +88,7 @@ const AdminDashboard: React.FC = () => {
         ...newBlogPost,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
-        authorId: 'admin', // You might want to replace this with the actual author ID
+        authorId: 'admin', // Possible to replace this with the actual author ID
       };
       const addedBlogPost = await createBlogPost(blogPostToAdd);
       setBlogPosts([...blogPosts, addedBlogPost]);
@@ -154,6 +154,11 @@ const AdminDashboard: React.FC = () => {
     navigate('/');
   };
 
+  const formatDate = (dateString: string) => {
+    const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+    return new Date(dateString).toLocaleDateString(undefined, options);
+  };
+
   return (
     <div className="admin-dashboard">
       <h1>Admin Dashboard</h1>
@@ -164,119 +169,153 @@ const AdminDashboard: React.FC = () => {
         <h2>Projects</h2>
         <ul className="item-list">
           {projects.map(project => (
-            <li key={project.id}>
-              <span>{project.name}</span>
-              <div>
-                <button onClick={() => setEditingProject(project)}>Edit</button>
-                <button onClick={() => handleDeleteProject(project.id)}>Delete</button>
+            <li key={project.id} className="item">
+              <div className="item-content">
+                <div className="item-info">
+                  <span className="item-name">{project.name}</span>
+                  <span className="item-date">Created: {formatDate(project.createdAt)}</span>
+                </div>
+                <div className="item-actions">
+                  <button onClick={() => setEditingProject(project)}>Edit</button>
+                  <button onClick={() => handleDeleteProject(project.id)}>Delete</button>
+                </div>
               </div>
             </li>
           ))}
         </ul>
         
-        {editingProject ? (
-          <form onSubmit={handleEditProject} className="edit-form">
-            <h3>Edit Project</h3>
-            <input
-              type="text"
-              value={editingProject.name}
-              onChange={(e) => setEditingProject({ ...editingProject, name: e.target.value })}
-              required
-            />
-            <textarea
-              value={editingProject.description}
-              onChange={(e) => setEditingProject({ ...editingProject, description: e.target.value })}
-              required
-            />
-            <input
-              type="text"
-              value={editingProject.technologies?.join(', ') || ''}
-              onChange={(e) => setEditingProject({ ...editingProject, technologies: e.target.value.split(',').map(tech => tech.trim()) })}
-            />
-            <div className="form-buttons">
-              <button type="submit">Update Project</button>
-              <button type="button" onClick={() => setEditingProject(null)}>Cancel</button>
-            </div>
-          </form>
-        ) : (
-          <form onSubmit={handleAddProject} className="add-form">
-            <h3>Add New Project</h3>
-            <input
-              type="text"
-              placeholder="Project Name"
-              value={newProject.name}
-              onChange={(e) => setNewProject({ ...newProject, name: e.target.value })}
-              required
-            />
-            <textarea
-              placeholder="Project Description"
-              value={newProject.description}
-              onChange={(e) => setNewProject({ ...newProject, description: e.target.value })}
-              required
-            />
-            <input
-              type="text"
-              placeholder="Technologies (comma-separated)"
-              value={newProject.technologies?.join(', ') || ''}
-              onChange={(e) => setNewProject({ ...newProject, technologies: e.target.value.split(',').map(tech => tech.trim()) })}
-            />
-            <button type="submit">Add Project</button>
-          </form>
-        )}
+        <div className="form-wrapper">
+          {editingProject ? (
+            <form onSubmit={handleEditProject} className="edit-form">
+              <h3>Edit Project</h3>
+              <label htmlFor="edit-project-name">Project Name:</label>
+              <input
+                id="edit-project-name"
+                type="text"
+                value={editingProject.name}
+                onChange={(e) => setEditingProject({ ...editingProject, name: e.target.value })}
+                required
+              />
+              <label htmlFor="edit-project-description">Project Description:</label>
+              <textarea
+                id="edit-project-description"
+                value={editingProject.description}
+                onChange={(e) => setEditingProject({ ...editingProject, description: e.target.value })}
+                required
+              />
+              <label htmlFor="edit-project-technologies">Technologies (comma-separated):</label>
+              <input
+                id="edit-project-technologies"
+                type="text"
+                value={editingProject.technologies?.join(', ') || ''}
+                onChange={(e) => setEditingProject({ ...editingProject, technologies: e.target.value.split(',').map(tech => tech.trim()) })}
+              />
+              <div className="form-buttons">
+                <button type="submit">Update Project</button>
+                <button type="button" onClick={() => setEditingProject(null)}>Cancel</button>
+              </div>
+            </form>
+          ) : (
+            <form onSubmit={handleAddProject} className="add-form">
+              <h3>Add New Project</h3>
+              <label htmlFor="new-project-name">Project Name:</label>
+              <input
+                id="new-project-name"
+                type="text"
+                placeholder="Enter project name"
+                value={newProject.name}
+                onChange={(e) => setNewProject({ ...newProject, name: e.target.value })}
+                required
+              />
+              <label htmlFor="new-project-description">Project Description:</label>
+              <textarea
+                id="new-project-description"
+                placeholder="Enter project description"
+                value={newProject.description}
+                onChange={(e) => setNewProject({ ...newProject, description: e.target.value })}
+                required
+              />
+              <label htmlFor="new-project-technologies">Technologies (comma-separated):</label>
+              <input
+                id="new-project-technologies"
+                type="text"
+                placeholder="e.g. React, Node.js, MongoDB"
+                value={newProject.technologies?.join(', ') || ''}
+                onChange={(e) => setNewProject({ ...newProject, technologies: e.target.value.split(',').map(tech => tech.trim()) })}
+              />
+              <button type="submit">Add Project</button>
+            </form>
+          )}
+        </div>
       </div>
 
       <div className="admin-section">
         <h2>Blog Posts</h2>
         <ul className="item-list">
           {blogPosts.map(post => (
-            <li key={post.id}>
-              <span>{post.title}</span>
-              <div>
-                <button onClick={() => setEditingBlogPost(post)}>Edit</button>
-                <button onClick={() => handleDeleteBlogPost(post.id)}>Delete</button>
+            <li key={post.id} className="item">
+              <div className="item-content">
+                <div className="item-info">
+                  <span className="item-name">{post.title}</span>
+                  <span className="item-date">Created: {formatDate(post.createdAt)}</span>
+                </div>
+                <div className="item-actions">
+                  <button onClick={() => setEditingBlogPost(post)}>Edit</button>
+                  <button onClick={() => handleDeleteBlogPost(post.id)}>Delete</button>
+                </div>
               </div>
             </li>
           ))}
         </ul>
         
-        {editingBlogPost ? (
-          <form onSubmit={handleEditBlogPost} className="edit-form">
-            <h3>Edit Blog Post</h3>
-            <input
-              type="text"
-              value={editingBlogPost.title}
-              onChange={(e) => setEditingBlogPost({ ...editingBlogPost, title: e.target.value })}
-              required
-            />
-            <textarea
-              value={editingBlogPost.content}
-              onChange={(e) => setEditingBlogPost({ ...editingBlogPost, content: e.target.value })}
-              required
-            />
-            <div className="form-buttons">
-              <button type="submit">Update Blog Post</button>
-              <button type="button" onClick={() => setEditingBlogPost(null)}>Cancel</button>
-            </div>
-          </form>
-        ) : (
-          <form onSubmit={handleAddBlogPost} className="add-form">
-            <h3>Add New Blog Post</h3>
-            <input
-              type="text"
-              placeholder="Blog Post Title"
-              value={newBlogPost.title}
-              onChange={(e) => setNewBlogPost({ ...newBlogPost, title: e.target.value })}
-              required
-            />
-            <textarea
-              placeholder="Blog Post Content"
-              value={newBlogPost.content}
-              onChange={(e) => setNewBlogPost({ ...newBlogPost, content: e.target.value })}
-              required
-            />
-            <button type="submit">Add Blog Post</button>
-          </form>
-        )}
+        <div className="form-wrapper">
+          {editingBlogPost ? (
+            <form onSubmit={handleEditBlogPost} className="edit-form">
+              <h3>Edit Blog Post</h3>
+              <label htmlFor="edit-blog-title">Blog Post Title:</label>
+              <input
+                id="edit-blog-title"
+                type="text"
+                value={editingBlogPost.title}
+                onChange={(e) => setEditingBlogPost({ ...editingBlogPost, title: e.target.value })}
+                required
+              />
+              <label htmlFor="edit-blog-content">Blog Post Content:</label>
+              <textarea
+                id="edit-blog-content"
+                value={editingBlogPost.content}
+                onChange={(e) => setEditingBlogPost({ ...editingBlogPost, content: e.target.value })}
+                required
+              />
+              <div className="form-buttons">
+                <button type="submit">Update Blog Post</button>
+                <button type="button" onClick={() => setEditingBlogPost(null)}>Cancel</button>
+              </div>
+            </form>
+          ) : (
+            <form onSubmit={handleAddBlogPost} className="add-form">
+              <h3>Add New Blog Post</h3>
+              <label htmlFor="new-blog-title">Blog Post Title:</label>
+              <input
+                id="new-blog-title"
+                type="text"
+                placeholder="Enter blog post title"
+                value={newBlogPost.title}
+                onChange={(e) => setNewBlogPost({ ...newBlogPost, title: e.target.value })}
+                required
+              />
+              <label htmlFor="new-blog-content">Blog Post Content:</label>
+              <textarea
+                id="new-blog-content"
+                placeholder="Enter blog post content"
+                value={newBlogPost.content}
+                onChange={(e) => setNewBlogPost({ ...newBlogPost, content: e.target.value })}
+                required
+              />
+              <button type="submit">Add Blog Post</button>
+            </form>
+          )}
+        </div>
       </div>
     </div>
   );
