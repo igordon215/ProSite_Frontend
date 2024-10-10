@@ -65,16 +65,22 @@ const AdminDashboard: React.FC = () => {
   const handleAddProject = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    console.log('handleAddProject called'); // Debug log
     try {
       const projectToAdd: Omit<Project, 'id'> = {
         ...newProject,
+        title: newProject.name, // Set title to the same value as name
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       };
+      console.log('Project to add:', projectToAdd); // Debug log
       const addedProject = await createProject(projectToAdd);
+      console.log('Added project:', addedProject); // Debug log
       setProjects([...projects, addedProject]);
       setNewProject({ name: '', description: '', technologies: [] });
+      console.log('Projects after adding:', projects); // Debug log
     } catch (err) {
+      console.error('Error adding project:', err); // Debug log
       setError('Failed to add project. Please try again.');
       handleApiError(err);
     }
@@ -104,7 +110,10 @@ const AdminDashboard: React.FC = () => {
     if (!editingProject) return;
     setError(null);
     try {
-      const updatedProject = await updateProject(editingProject.id, editingProject);
+      const updatedProject = await updateProject(editingProject.id, {
+        ...editingProject,
+        title: editingProject.name, // Ensure title is set when updating
+      });
       setProjects(projects.map(p => p.id === updatedProject.id ? updatedProject : p));
       setEditingProject(null);
     } catch (err) {
@@ -154,15 +163,16 @@ const AdminDashboard: React.FC = () => {
     navigate('/');
   };
 
-  const formatDate = (dateArray: number[]) => {
-    if (!dateArray || !Array.isArray(dateArray) || dateArray.length < 6) {
-      console.error('Invalid date array:', dateArray);
-      return 'Invalid Date';
+  const formatDate = (dateInput: string | number[]) => {
+    let date: Date;
+    if (Array.isArray(dateInput)) {
+      const [year, month, day, hour, minute, second] = dateInput;
+      date = new Date(year, month - 1, day, hour, minute, second);
+    } else {
+      date = new Date(dateInput);
     }
-    const [year, month, day, hour, minute, second] = dateArray;
-    const date = new Date(year, month - 1, day, hour, minute, second);
     if (isNaN(date.getTime())) {
-      console.error('Invalid date:', dateArray);
+      console.error('Invalid date:', dateInput);
       return 'Invalid Date';
     }
     const options: Intl.DateTimeFormatOptions = { 
@@ -191,7 +201,7 @@ const AdminDashboard: React.FC = () => {
               <div className="item-content">
                 <div className="item-info">
                   <span className="item-name">{project.name}</span>
-                  <span className="item-date">Created: {formatDate(project.createdAt as number[])}</span>
+                  <span className="item-date">Created: {formatDate(project.createdAt)}</span>
                 </div>
                 <div className="item-actions">
                   <button onClick={() => setEditingProject(project)}>Edit</button>
@@ -275,7 +285,7 @@ const AdminDashboard: React.FC = () => {
               <div className="item-content">
                 <div className="item-info">
                   <span className="item-name">{post.title}</span>
-                  <span className="item-date">Created: {formatDate(post.createdAt as number[])}</span>
+                  <span className="item-date">Created: {formatDate(post.createdAt)}</span>
                 </div>
                 <div className="item-actions">
                   <button onClick={() => setEditingBlogPost(post)}>Edit</button>
