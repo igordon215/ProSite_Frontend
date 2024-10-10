@@ -86,9 +86,9 @@ const AdminDashboard: React.FC = () => {
     try {
       const blogPostToAdd: Omit<BlogPost, 'id'> = {
         ...newBlogPost,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-        authorId: 'admin', // Possible to replace this with the actual author ID
+        authorId: 'admin', // Replace with actual author ID if available
+        createdAt: '', // This will be set by the server
+        updatedAt: '', // This will be set by the server
       };
       const addedBlogPost = await createBlogPost(blogPostToAdd);
       setBlogPosts([...blogPosts, addedBlogPost]);
@@ -154,9 +154,27 @@ const AdminDashboard: React.FC = () => {
     navigate('/');
   };
 
-  const formatDate = (dateString: string) => {
-    const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
-    return new Date(dateString).toLocaleDateString(undefined, options);
+  const formatDate = (dateArray: number[]) => {
+    if (!dateArray || !Array.isArray(dateArray) || dateArray.length < 6) {
+      console.error('Invalid date array:', dateArray);
+      return 'Invalid Date';
+    }
+    const [year, month, day, hour, minute, second] = dateArray;
+    const date = new Date(year, month - 1, day, hour, minute, second);
+    if (isNaN(date.getTime())) {
+      console.error('Invalid date:', dateArray);
+      return 'Invalid Date';
+    }
+    const options: Intl.DateTimeFormatOptions = { 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      timeZoneName: 'short'
+    };
+    return date.toLocaleString(undefined, options);
   };
 
   return (
@@ -173,7 +191,7 @@ const AdminDashboard: React.FC = () => {
               <div className="item-content">
                 <div className="item-info">
                   <span className="item-name">{project.name}</span>
-                  <span className="item-date">Created: {formatDate(project.createdAt)}</span>
+                  <span className="item-date">Created: {formatDate(project.createdAt as number[])}</span>
                 </div>
                 <div className="item-actions">
                   <button onClick={() => setEditingProject(project)}>Edit</button>
@@ -248,7 +266,7 @@ const AdminDashboard: React.FC = () => {
           )}
         </div>
       </div>
-
+      
       <div className="admin-section">
         <h2>Blog Posts</h2>
         <ul className="item-list">
@@ -257,7 +275,7 @@ const AdminDashboard: React.FC = () => {
               <div className="item-content">
                 <div className="item-info">
                   <span className="item-name">{post.title}</span>
-                  <span className="item-date">Created: {formatDate(post.createdAt)}</span>
+                  <span className="item-date">Created: {formatDate(post.createdAt as number[])}</span>
                 </div>
                 <div className="item-actions">
                   <button onClick={() => setEditingBlogPost(post)}>Edit</button>

@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import { getAllBlogPosts, getAllProjects, handleApiError } from './api';
 import Home from './components/Home';
 import BlogPost from './components/BlogPost';
+import BlogList from './components/BlogList';
 import Project from './components/Project';
 import AdminDashboard from './components/AdminDashboard';
 import { BlogPost as BlogPostType, Project as ProjectType } from './types';
@@ -69,6 +70,7 @@ function App() {
             <div className="content">
               <Routes>
                 <Route path="/" element={<Home blogPosts={blogPosts} projects={projects} />} />
+                <Route path="/blog" element={<BlogList blogPosts={blogPosts} />} />
                 <Route path="/blog/:id" element={<BlogPost />} />
                 <Route path="/project/:id" element={<Project />} />
                 <Route path="/admin" element={<ProtectedRoute element={<AdminDashboard />} />} />
