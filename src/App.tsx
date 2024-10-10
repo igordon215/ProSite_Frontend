@@ -5,6 +5,7 @@ import Home from './components/Home';
 import BlogPost from './components/BlogPost';
 import BlogList from './components/BlogList';
 import Project from './components/Project';
+import ProjectList from './components/ProjectList';
 import AdminDashboard from './components/AdminDashboard';
 import { BlogPost as BlogPostType, Project as ProjectType } from './types';
 import { AuthProvider, useAuth } from './context/AuthContext';
@@ -72,6 +73,7 @@ function App() {
                 <Route path="/" element={<Home blogPosts={blogPosts} projects={projects} />} />
                 <Route path="/blog" element={<BlogList blogPosts={blogPosts} />} />
                 <Route path="/blog/:id" element={<BlogPost />} />
+                <Route path="/projects" element={<ProjectList projects={projects} />} />
                 <Route path="/project/:id" element={<Project />} />
                 <Route path="/admin" element={<ProtectedRoute element={<AdminDashboard />} />} />
               </Routes>
