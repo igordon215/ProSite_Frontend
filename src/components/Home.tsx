@@ -6,6 +6,7 @@ import AboutMe from './AboutMe';
 import IntroSection from './IntroSection';
 import Projects from './Projects';
 import Login from './Login';
+import './Blog.css';
 
 interface HomeProps {
   blogPosts: BlogPost[];

@@ -1,14 +1,14 @@
-.projects {
+.blog {
   padding: 2rem 0;
 }
 
-.project-grid {
+.blog-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: repeat(2, auto);
   grid-template-areas: 
-    "project1 project2"
-    "project3 project4";
+    "blog1 blog2"
+    "blog3 blog4";
   gap: 2rem;
   margin-top: 2rem;
   max-width: 1200px;
@@ -16,13 +16,13 @@
   margin-right: auto;
 }
 
-.project-card:nth-child(1) { grid-area: project1; }
-.project-card:nth-child(2) { grid-area: project2; }
-.project-card:nth-child(3) { grid-area: project3; }
-.project-card:nth-child(4) { grid-area: project4; }
-.project-card:nth-child(n+5) { display: none; }
+.blog-card:nth-child(1) { grid-area: blog1; }
+.blog-card:nth-child(2) { grid-area: blog2; }
+.blog-card:nth-child(3) { grid-area: blog3; }
+.blog-card:nth-child(4) { grid-area: blog4; }
+.blog-card:nth-child(n+5) { display: none; }
 
-.project-card {
+.blog-card {
   background-color: rgba(0, 0, 0, 0.419);
   border-radius: 20px;
   padding: 1.5rem;
@@ -33,17 +33,17 @@
   max-height: 300px; /* Adjust this value as needed */
 }
 
-.project-card:hover {
+.blog-card:hover {
   transform: translateY(-5px);
 }
 
-.project-card h3 {
+.blog-card h3 {
   font-size: 1.5rem;
   margin-bottom: 1rem;
   color: #F54E37;
 }
 
-.project-card p {
+.blog-card p {
   margin-bottom: 1rem;
   color: #ffffff;
   flex-grow: 1;
@@ -54,19 +54,30 @@
   -webkit-box-orient: vertical;
 }
 
-.tech-stack {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
-}
-
-.tech-tag {
+.read-more {
+  display: inline-block;
   background-color: #F54E37;
   color: #000000;
-  padding: 0.25rem 0.5rem;
-  border-radius: 4px;
-  font-size: 0.875rem;
+  padding: 0.5rem 1rem;
+  border-radius: 30px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  align-self: center;
+  margin-top: auto;
+}
+
+.read-more:hover {
+  background-color: #d000ff;
+  box-shadow: 0 0 20px rgb(255, 130, 130);
+}
+
+.blog h2 {
+  color: #F54E37;
+  font-size: 2rem;
+  text-align: center;
+  margin-bottom: 1rem;
+  text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5);
 }
 
 .view-more {
@@ -88,27 +99,19 @@
   box-shadow: 0 0 20px rgb(255, 130, 130);
 }
 
-.projects h2 {
-  color: #F54E37;
-  font-size: 2rem;
-  text-align: center;
-  margin-bottom: 1rem;
-  text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5);
-}
-
-.projects .view-more {
+.blog .view-more {
   display: inline-block;
   margin: 2rem auto 0;
   text-align: center;
 }
 
 @media (max-width: 768px) {
-  .project-grid {
+  .blog-grid {
     grid-template-columns: 1fr;
     grid-template-areas: 
-      "project1"
-      "project2"
-      "project3"
-      "project4";
+      "blog1"
+      "blog2"
+      "blog3"
+      "blog4";
   }
 }
