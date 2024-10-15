@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { getProjectById, handleApiError } from '../api';
 import { Project as ProjectType } from '../types';
+import './Projects.css';
 
 const Project: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -41,20 +42,32 @@ const Project: React.FC = () => {
   }
 
   return (
-    <div className="project">
-      <Link to="/" className="back-link">Back to Home</Link>
+    <div className="full-project">
       <h1>{project.name}</h1>
-      <p className="description">{project.description}</p>
-      {project.technologies && project.technologies.length > 0 && (
-        <div className="technologies">
-          <h2>Technologies Used:</h2>
-          <ul>
-            {project.technologies.map((tech, index) => (
-              <li key={index}>{tech}</li>
-            ))}
-          </ul>
-        </div>
-      )}
+      <div className="content">
+        <p>{project.description}</p>
+        {project.technologies && project.technologies.length > 0 && (
+          <div className="technologies">
+            <h2>Technologies Used:</h2>
+            <ul>
+              {project.technologies.map((tech, index) => (
+                <li key={index}>{tech}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+        {project.repoUrl && (
+          <p>
+            <a href={project.repoUrl} target="_blank" rel="noopener noreferrer">View Repository</a>
+          </p>
+        )}
+        {project.liveUrl && (
+          <p>
+            <a href={project.liveUrl} target="_blank" rel="noopener noreferrer">View Live Project</a>
+          </p>
+        )}
+      </div>
+      <Link to="/" className="view-more back-button">Back to Home</Link>
     </div>
   );
 };
