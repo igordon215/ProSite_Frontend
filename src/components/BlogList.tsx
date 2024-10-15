@@ -8,6 +8,27 @@ interface BlogListProps {
 }
 
 const BlogList: React.FC<BlogListProps> = ({ blogPosts }) => {
+  // Function to format the date
+  const formatDate = (dateInput: string | number[]) => {
+    let date: Date;
+    if (Array.isArray(dateInput)) {
+      const [year, month, day] = dateInput;
+      date = new Date(year, month - 1, day); // month is 0-indexed in JavaScript Date
+    } else {
+      date = new Date(dateInput);
+    }
+    if (isNaN(date.getTime())) {
+      console.error('Invalid date:', dateInput);
+      return 'Invalid Date';
+    }
+    const options: Intl.DateTimeFormatOptions = { 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric'
+    };
+    return date.toLocaleDateString(undefined, options);
+  };
+
   return (
     <div className="App">
       <header className="header">
@@ -37,6 +58,7 @@ const BlogList: React.FC<BlogListProps> = ({ blogPosts }) => {
             {blogPosts.map((post) => (
               <div key={post.id} className="blog-card">
                 <h3>{post.title}</h3>
+                <p className="blog-date">Created on: {formatDate(post.createdAt)}</p>
                 <p>{post.content.substring(0, 100)}...</p>
                 <Link to={`/blog/${post.id}`} className="view-more">Read Full Article</Link>
               </div>
