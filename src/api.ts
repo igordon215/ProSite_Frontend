@@ -17,7 +17,8 @@ const handleResponse = async (response: Response) => {
     console.error('API Error:', response.status, errorText);
     throw new Error(`API error ${response.status}: ${errorText}`);
   }
-  return response.json();
+  const text = await response.text();
+  return text ? JSON.parse(text) : null;
 };
 
 // Helper function to create headers with authentication

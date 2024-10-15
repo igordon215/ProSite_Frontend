@@ -12,8 +12,7 @@ const Projects: React.FC<ProjectsProps> = ({ projects }) => {
     <section id="projects" className="projects">
       <h2>Project Portfolio</h2>
       <div className="project-grid">
-        {/* TODO: Update this section to display 4 projects when more project data is available */}
-        {projects.slice(0, 3).map((project) => (
+        {projects.slice(0, 4).map((project) => (
           <div key={project.id} className="project-card">
             <h3>{project.name}</h3>
             <p>{project.description}</p>

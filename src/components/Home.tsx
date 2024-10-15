@@ -6,6 +6,7 @@ import AboutMe from './AboutMe';
 import IntroSection from './IntroSection';
 import Projects from './Projects';
 import Login from './Login';
+import './Blog.css';
 
 interface HomeProps {
   blogPosts: BlogPost[];
@@ -74,9 +75,9 @@ const Home: React.FC<HomeProps> = ({ blogPosts, projects }) => {
         <Projects projects={projects} />
 
         <section id="blog" className="blog">
-          <h2>Tech Insights & Industry Trends</h2>
+          <h2>Sunday Morning Coffee and Code</h2>
           <div className="blog-grid">
-            {blogPosts.slice(0, 3).map((post) => (
+            {blogPosts.slice(0, 4).map((post) => (
               <div key={post.id} className="blog-card">
                 <h3>{post.title}</h3>
                 <p>{post.content.substring(0, 100)}...</p>
@@ -84,7 +85,7 @@ const Home: React.FC<HomeProps> = ({ blogPosts, projects }) => {
               </div>
             ))}
           </div>
-          <Link to="/blog" className="view-more">Access the Knowledge Hub</Link>
+          <Link to="/blog" className="view-more">View Blog Posts</Link>
         </section>
 
         <section id="contact" className="contact">

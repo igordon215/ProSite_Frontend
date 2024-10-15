@@ -65,16 +65,22 @@ const AdminDashboard: React.FC = () => {
   const handleAddProject = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    console.log('handleAddProject called'); // Debug log
     try {
       const projectToAdd: Omit<Project, 'id'> = {
         ...newProject,
+        title: newProject.name, // Set title to the same value as name
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       };
+      console.log('Project to add:', projectToAdd); // Debug log
       const addedProject = await createProject(projectToAdd);
+      console.log('Added project:', addedProject); // Debug log
       setProjects([...projects, addedProject]);
       setNewProject({ name: '', description: '', technologies: [] });
+      console.log('Projects after adding:', projects); // Debug log
     } catch (err) {
+      console.error('Error adding project:', err); // Debug log
       setError('Failed to add project. Please try again.');
       handleApiError(err);
     }
@@ -86,9 +92,9 @@ const AdminDashboard: React.FC = () => {
     try {
       const blogPostToAdd: Omit<BlogPost, 'id'> = {
         ...newBlogPost,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-        authorId: 'admin', // Possible to replace this with the actual author ID
+        authorId: 'admin', // Replace with actual author ID if available
+        createdAt: '', // This will be set by the server
+        updatedAt: '', // This will be set by the server
       };
       const addedBlogPost = await createBlogPost(blogPostToAdd);
       setBlogPosts([...blogPosts, addedBlogPost]);
@@ -104,7 +110,10 @@ const AdminDashboard: React.FC = () => {
     if (!editingProject) return;
     setError(null);
     try {
-      const updatedProject = await updateProject(editingProject.id, editingProject);
+      const updatedProject = await updateProject(editingProject.id, {
+        ...editingProject,
+        title: editingProject.name, // Ensure title is set when updating
+      });
       setProjects(projects.map(p => p.id === updatedProject.id ? updatedProject : p));
       setEditingProject(null);
     } catch (err) {
@@ -154,9 +163,28 @@ const AdminDashboard: React.FC = () => {
     navigate('/');
   };
 
-  const formatDate = (dateString: string) => {
-    const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
-    return new Date(dateString).toLocaleDateString(undefined, options);
+  const formatDate = (dateInput: string | number[]) => {
+    let date: Date;
+    if (Array.isArray(dateInput)) {
+      const [year, month, day, hour, minute, second] = dateInput;
+      date = new Date(year, month - 1, day, hour, minute, second);
+    } else {
+      date = new Date(dateInput);
+    }
+    if (isNaN(date.getTime())) {
+      console.error('Invalid date:', dateInput);
+      return 'Invalid Date';
+    }
+    const options: Intl.DateTimeFormatOptions = { 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      timeZoneName: 'short'
+    };
+    return date.toLocaleString(undefined, options);
   };
 
   return (
@@ -248,7 +276,7 @@ const AdminDashboard: React.FC = () => {
           )}
         </div>
       </div>
-
+      
       <div className="admin-section">
         <h2>Blog Posts</h2>
         <ul className="item-list">
