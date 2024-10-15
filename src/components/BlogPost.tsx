@@ -2,12 +2,35 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { getBlogPostById, handleApiError } from '../api';
 import { BlogPost as BlogPostType } from '../types';
+import DOMPurify from 'dompurify';
+import '../components/Blog.css';
 
 const BlogPost: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [post, setPost] = useState<BlogPostType | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  // Function to format the date
+  const formatDate = (dateInput: string | number[]) => {
+    let date: Date;
+    if (Array.isArray(dateInput)) {
+      const [year, month, day] = dateInput;
+      date = new Date(year, month - 1, day); // month is 0-indexed in JavaScript Date
+    } else {
+      date = new Date(dateInput);
+    }
+    if (isNaN(date.getTime())) {
+      console.error('Invalid date:', dateInput);
+      return 'Invalid Date';
+    }
+    const options: Intl.DateTimeFormatOptions = { 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric'
+    };
+    return date.toLocaleDateString(undefined, options);
+  };
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -40,11 +63,16 @@ const BlogPost: React.FC = () => {
     return <div className="error">Blog post not found.</div>;
   }
 
+  const sanitizedContent = DOMPurify.sanitize(post.content);
+
   return (
-    <div className="blog-post">
-      <Link to="/" className="back-link">Back to Home</Link>
+    <div className="full-blog-post">
       <h1>{post.title}</h1>
-      <div className="content">{post.content}</div>
+      <div className="meta">
+        <span className="date">Published on {formatDate(post.createdAt)}</span>
+      </div>
+      <div className="content" dangerouslySetInnerHTML={{ __html: sanitizedContent }} />
+      <Link to="/" className="view-more back-button">Back to Home</Link>
     </div>
   );
 };
