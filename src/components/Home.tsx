@@ -7,6 +7,7 @@ import IntroSection from './IntroSection';
 import Projects from './Projects';
 import Login from './Login';
 import ResumeDownload from './ResumeDownload';
+import ContactForm from './ContactForm';
 import './Blog.css';
 
 interface HomeProps {
@@ -94,16 +95,7 @@ const Home: React.FC<HomeProps> = ({ blogPosts, projects }) => {
           <Link to="/blog" className="view-more">View Blog Posts</Link>
         </section>
 
-        <section id="contact" className="contact">
-          <h2>Embark on Your Digital Transformation Journey</h2>
-          <p>Ready to revolutionize your business with cutting-edge technology? Let's collaborate to create solutions that will set you apart in the digital landscape.</p>
-          <form>
-            <input type="text" placeholder="Your Name" required />
-            <input type="email" placeholder="Your Email" required />
-            <textarea placeholder="Describe Your Vision" required></textarea>
-            <button type="submit" className="submit-button">Initiate Innovation</button>
-          </form>
-        </section>
+        <ContactForm />
       </main>
 
       <footer>
