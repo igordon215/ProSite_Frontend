@@ -5,23 +5,38 @@ const ContactForm: React.FC = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
+  const [status, setStatus] = useState('');
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // TODO: Implement the actual email sending logic here
-    // This will require a backend service
-    console.log('Form submitted:', { name, email, message });
-    // Reset form fields after submission
-    setName('');
-    setEmail('');
-    setMessage('');
-    alert('Thank you for your message. We will get back to you soon!');
+    setStatus('Sending...');
+
+    try {
+      const response = await fetch('http://localhost:8080/api/email/send', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name, email, message }),
+      });
+
+      if (response.ok) {
+        setStatus('Thank you for your message. We will get back to you soon!');
+        setName('');
+        setEmail('');
+        setMessage('');
+      } else {
+        setStatus('There was an error sending your message. Please try again.');
+      }
+    } catch (error) {
+      setStatus('There was an error sending your message. Please try again.');
+    }
   };
 
   return (
     <section id="contact" className="contact">
-      <h2>Embark on Your Digital Transformation Journey</h2>
-      <p>Ready to revolutionize your business with cutting-edge technology? Let's collaborate to create solutions that will set you apart in the digital landscape.</p>
+      <h2>Contact Me</h2>
+      <p>Let's Connect! Send Me A Message Below</p>
       <form onSubmit={handleSubmit}>
         <input
           type="text"
@@ -38,12 +53,13 @@ const ContactForm: React.FC = () => {
           onChange={(e) => setEmail(e.target.value)}
         />
         <textarea
-          placeholder="Describe Your Vision"
+          placeholder="Your Message:"
           required
           value={message}
           onChange={(e) => setMessage(e.target.value)}
         ></textarea>
-        <button type="submit" className="submit-button">Initiate Innovation</button>
+        <button type="submit" className="submit-button">Send Connection</button>
+        {status && <p className="status-message">{status}</p>}
       </form>
     </section>
   );

@@ -99,7 +99,7 @@ const Home: React.FC<HomeProps> = ({ blogPosts, projects }) => {
       </main>
 
       <footer>
-        <p>&copy; 2023 IG Codes. Empowering businesses through advanced software solutions.</p>
+        <p>&copy; 2024 IG Codes</p>
       </footer>
 
       <Login />
