@@ -14,6 +14,8 @@ import {
 } from '../api';
 import { Project, BlogPost } from '../types';
 import './AdminDashboard.css';
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 const AdminDashboard: React.FC = () => {
   const { isAuthenticated, logout } = useAuth();
@@ -225,11 +227,13 @@ const AdminDashboard: React.FC = () => {
                 required
               />
               <label htmlFor="edit-project-description">Project Description:</label>
-              <textarea
-                id="edit-project-description"
-                value={editingProject.description}
-                onChange={(e) => setEditingProject({ ...editingProject, description: e.target.value })}
-                required
+              <CKEditor
+                editor={ClassicEditor}
+                data={editingProject.description}
+                onChange={(event, editor) => {
+                  const data = editor.getData();
+                  setEditingProject({ ...editingProject, description: data });
+                }}
               />
               <label htmlFor="edit-project-technologies">Technologies (comma-separated):</label>
               <input
@@ -256,12 +260,13 @@ const AdminDashboard: React.FC = () => {
                 required
               />
               <label htmlFor="new-project-description">Project Description:</label>
-              <textarea
-                id="new-project-description"
-                placeholder="Enter project description"
-                value={newProject.description}
-                onChange={(e) => setNewProject({ ...newProject, description: e.target.value })}
-                required
+              <CKEditor
+                editor={ClassicEditor}
+                data={newProject.description}
+                onChange={(event, editor) => {
+                  const data = editor.getData();
+                  setNewProject({ ...newProject, description: data });
+                }}
               />
               <label htmlFor="new-project-technologies">Technologies (comma-separated):</label>
               <input
@@ -309,11 +314,13 @@ const AdminDashboard: React.FC = () => {
                 required
               />
               <label htmlFor="edit-blog-content">Blog Post Content:</label>
-              <textarea
-                id="edit-blog-content"
-                value={editingBlogPost.content}
-                onChange={(e) => setEditingBlogPost({ ...editingBlogPost, content: e.target.value })}
-                required
+              <CKEditor
+                editor={ClassicEditor}
+                data={editingBlogPost.content}
+                onChange={(event, editor) => {
+                  const data = editor.getData();
+                  setEditingBlogPost({ ...editingBlogPost, content: data });
+                }}
               />
               <div className="form-buttons">
                 <button type="submit">Update Blog Post</button>
@@ -333,12 +340,13 @@ const AdminDashboard: React.FC = () => {
                 required
               />
               <label htmlFor="new-blog-content">Blog Post Content:</label>
-              <textarea
-                id="new-blog-content"
-                placeholder="Enter blog post content"
-                value={newBlogPost.content}
-                onChange={(e) => setNewBlogPost({ ...newBlogPost, content: e.target.value })}
-                required
+              <CKEditor
+                editor={ClassicEditor}
+                data={newBlogPost.content}
+                onChange={(event, editor) => {
+                  const data = editor.getData();
+                  setNewBlogPost({ ...newBlogPost, content: data });
+                }}
               />
               <button type="submit">Add Blog Post</button>
             </form>
