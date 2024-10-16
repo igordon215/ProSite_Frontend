@@ -6,6 +6,7 @@ import AboutMe from './AboutMe';
 import IntroSection from './IntroSection';
 import Projects from './Projects';
 import Login from './Login';
+import ResumeDownload from './ResumeDownload';
 import './Blog.css';
 
 interface HomeProps {
@@ -49,6 +50,7 @@ const Home: React.FC<HomeProps> = ({ blogPosts, projects }) => {
             <ul>
               <li><a href="#home">Home</a></li>
               <li><a href="#about">About</a></li>
+              <li><a href="#resume">Resume</a></li>
               <li><a href="#projects">Projects</a></li>
               <li><a href="#blog">Blog</a></li>
               <li><a href="#contact">Contact</a></li>
@@ -70,6 +72,10 @@ const Home: React.FC<HomeProps> = ({ blogPosts, projects }) => {
 
         <section id="about" className="about">
           <AboutMe />
+        </section>
+
+        <section id="resume">
+          <ResumeDownload />
         </section>
 
         <Projects projects={projects} />
