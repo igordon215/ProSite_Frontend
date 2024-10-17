@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { BlogPost } from '../types';
-import { createBlogPost, getAllBlogPosts, updateBlogPost, deleteBlogPost, handleApiError } from '../api';
+import { BlogPost } from '../../types';
+import { createBlogPost, getAllBlogPosts, updateBlogPost, deleteBlogPost, handleApiError } from '../../api';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 

@@ -35,7 +35,7 @@ const ContactForm: React.FC = () => {
 
   return (
     <section id="contact" className="contact">
-      <h2>Contact Me</h2>
+      <h2 className="text-3xl font-bold text-center heading-color">Contact Me</h2>
       <div className="social-icons">
         <a href="https://www.linkedin.com/in/iangordoncodes/" target="_blank" rel="noopener noreferrer" className="social-icon-link">
           <img src="/linkedin.png" alt="LinkedIn" className="social-icon" />

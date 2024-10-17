@@ -6,7 +6,7 @@ import BlogPost from './components/BlogPost';
 import BlogList from './components/BlogList';
 import Project from './components/Project';
 import ProjectList from './components/ProjectList';
-import AdminDashboard from './components/AdminDashboard';
+import AdminDashboard from './components/AdminDashboard/AdminDashboard';
 import { BlogPost as BlogPostType, Project as ProjectType } from './types';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import './App.css';

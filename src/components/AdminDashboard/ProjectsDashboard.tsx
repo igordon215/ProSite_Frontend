@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Project } from '../types';
-import { createProject, getAllProjects, updateProject, deleteProject, handleApiError } from '../api';
+import { Project } from '../../types';
+import { createProject, getAllProjects, updateProject, deleteProject, handleApiError } from '../../api';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
