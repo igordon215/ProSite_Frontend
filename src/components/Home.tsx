@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { BlogPost, Project } from '../types';
 import TypedWelcome from './TypedWelcome';
 import AboutMe from './AboutMe';
@@ -8,6 +7,7 @@ import Projects from './Projects';
 import Login from './Login';
 import ResumeDownload from './ResumeDownload';
 import ContactForm from './ContactForm';
+import BlogSection from './BlogSection';
 import './Blog.css';
 
 interface HomeProps {
@@ -89,19 +89,7 @@ const Home: React.FC<HomeProps> = ({ blogPosts, projects }) => {
 
         <Projects projects={projects} />
 
-        <section id="blog" className="blog">
-          <h2>Sunday Morning Coffee and Code</h2>
-          <div className="blog-grid">
-            {blogPosts.slice(0, 4).map((post) => (
-              <div key={post.id} className="blog-card">
-                <h3>{post.title}</h3>
-                <p>{post.content.substring(0, 100)}...</p>
-                <Link to={`/blog/${post.id}`} className="read-more">Explore Full Article</Link>
-              </div>
-            ))}
-          </div>
-          <Link to="/blog" className="view-more">View Blog Posts</Link>
-        </section>
+        <BlogSection blogPosts={blogPosts} />
 
         <ContactForm />
       </main>

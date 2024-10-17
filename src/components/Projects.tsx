@@ -10,7 +10,7 @@ interface ProjectsProps {
 const Projects: React.FC<ProjectsProps> = ({ projects }) => {
   return (
     <section id="projects" className="projects">
-      <h2>Project Portfolio</h2>
+      <h2 className="text-3xl font-bold text-center heading-color">Project Portfolio</h2>
       <div className="project-grid">
         {projects.slice(0, 4).map((project) => (
           <div key={project.id} className="project-card">
