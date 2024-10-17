@@ -20,6 +20,36 @@
   text-align: center;
 }
 
+.social-icons {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.social-icon-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: #ffffff;
+  transition: transform 0.3s ease;
+}
+
+.social-icon-link:hover {
+  transform: scale(1.1);
+}
+
+.social-icon {
+  width: 48px;
+  height: 48px;
+  margin-bottom: 0.5rem;
+}
+
+.social-icon-link span {
+  font-size: 0.9rem;
+}
+
 .contact form {
   display: flex;
   flex-direction: column;

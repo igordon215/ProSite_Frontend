@@ -55,6 +55,14 @@ const Home: React.FC<HomeProps> = ({ blogPosts, projects }) => {
               <li><a href="#projects">Projects</a></li>
               <li><a href="#blog">Blog</a></li>
               <li><a href="#contact">Contact</a></li>
+              <li style={{ display: 'flex', alignItems: 'center', marginLeft: '20px' }}>
+                <a href="https://www.linkedin.com/in/iangordoncodes/" target="_blank" rel="noopener noreferrer" style={{ marginRight: '10px' }}>
+                  <img src="/linkedin.png" alt="LinkedIn" style={{ width: '32px', height: '32px', verticalAlign: 'middle' }} />
+                </a>
+                <a href="https://github.com/igordon215" target="_blank" rel="noopener noreferrer">
+                  <img src="/github.png" alt="GitHub" style={{ width: '32px', height: '32px', verticalAlign: 'middle' }} />
+                </a>
+              </li>
             </ul>
           </nav>
         </div>

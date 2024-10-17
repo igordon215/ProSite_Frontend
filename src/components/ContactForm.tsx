@@ -36,6 +36,16 @@ const ContactForm: React.FC = () => {
   return (
     <section id="contact" className="contact">
       <h2>Contact Me</h2>
+      <div className="social-icons">
+        <a href="https://www.linkedin.com/in/iangordoncodes/" target="_blank" rel="noopener noreferrer" className="social-icon-link">
+          <img src="/linkedin.png" alt="LinkedIn" className="social-icon" />
+          <span>LinkedIn</span>
+        </a>
+        <a href="https://github.com/igordon215" target="_blank" rel="noopener noreferrer" className="social-icon-link">
+          <img src="/github.png" alt="GitHub" className="social-icon" />
+          <span>GitHub</span>
+        </a>
+      </div>
       <p>Let's Connect! Send Me A Message Below</p>
       <form onSubmit={handleSubmit}>
         <input
