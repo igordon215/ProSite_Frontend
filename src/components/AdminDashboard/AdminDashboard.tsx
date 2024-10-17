@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../../context/AuthContext';
 import { Navigate, useNavigate } from 'react-router-dom';
-import { Project, BlogPost } from '../types';
+import { Project, BlogPost } from '../../types';
 import './AdminDashboard.css';
 import ProjectsDashboard from './ProjectsDashboard';
 import BlogDashboard from './BlogDashboard';
