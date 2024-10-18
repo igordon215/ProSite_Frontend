@@ -44,12 +44,12 @@ const Home: React.FC<HomeProps> = ({ blogPosts, projects }) => {
     <div className="App">
       <header className="header">
         <div className="nav-container">
-          <div className="nav-logo">
-            <img src="/logo.png" alt="IG Codes Logo" className="small-logo" />
-          </div>
           <nav>
             <ul>
-              <li><a href="#home">Home</a></li>
+              <li style={{ display: 'flex', alignItems: 'center' }}>
+                <img src="/logo.png" alt="IG Codes Logo" className="small-logo" style={{ marginRight: '10px' }} />
+                <a href="#home">Home</a>
+              </li>
               <li><a href="#about">About</a></li>
               <li><a href="#resume">Resume</a></li>
               <li><a href="#projects">Projects</a></li>
