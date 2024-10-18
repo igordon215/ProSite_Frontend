@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { getBlogPostById, handleApiError } from '../api';
-import { BlogPost as BlogPostType } from '../types';
+import { getBlogPostById, handleApiError } from '../../api';
+import { BlogPost as BlogPostType } from '../../types';
 import DOMPurify from 'dompurify';
-import '../components/Blog.css';
+import './Blog.css';
 
 const BlogPost: React.FC = () => {
   const { id } = useParams<{ id: string }>();

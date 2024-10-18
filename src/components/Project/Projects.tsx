@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Project } from '../types';
+import { Project } from '../../types';
 import './Projects.css';
 
 interface ProjectsProps {
