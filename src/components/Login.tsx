@@ -49,14 +49,14 @@ const Login: React.FC = () => {
         style={{
           position: 'fixed',
           bottom: '10px',
-          right: '10px',
+          left: '20px',
           padding: '5px 10px',
           fontSize: '12px',
           backgroundColor: 'transparent',
-          border: '1px solid #ccc',
-          borderRadius: '3px',
+          //border: '1px solid #ccc',
+          //borderRadius: '3px',
           cursor: 'pointer',
-          opacity: 0.7,
+          opacity: 0.5,
         }}
       >
         Login
@@ -65,7 +65,7 @@ const Login: React.FC = () => {
         <div className="login-modal" style={{
           position: 'fixed',
           bottom: '50px',
-          right: '10px',
+          left: '10px', 
           padding: '20px',
           backgroundColor: 'black',
           border: '1px solid #ccc',
