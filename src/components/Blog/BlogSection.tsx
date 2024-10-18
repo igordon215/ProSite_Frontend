@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { BlogPost } from '../types';
+import { BlogPost } from '../../types';
 import './Blog.css';
 
 interface BlogSectionProps {

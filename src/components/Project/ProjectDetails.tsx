@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { getProjectById, handleApiError } from '../api';
-import { Project as ProjectType } from '../types';
+import { getProjectById, handleApiError } from '../../api';
+import { Project as ProjectType } from '../../types';
 import './Projects.css';
 
-const Project: React.FC = () => {
+const ProjectDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [project, setProject] = useState<ProjectType | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -72,4 +72,4 @@ const Project: React.FC = () => {
   );
 };
 
-export default Project;
+export default ProjectDetails;

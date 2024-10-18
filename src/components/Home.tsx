@@ -3,12 +3,12 @@ import { BlogPost, Project } from '../types';
 import TypedWelcome from './TypedWelcome';
 import AboutMe from './AboutMe';
 import IntroSection from './IntroSection';
-import Projects from './Projects';
+import Projects from './Project/Projects';
 import Login from './Login';
 import ResumeDownload from './ResumeDownload';
 import ContactForm from './ContactForm';
-import BlogSection from './BlogSection';
-import './Blog.css';
+import BlogSection from './Blog/BlogSection';
+import '../components/Blog/Blog.css';
 
 interface HomeProps {
   blogPosts: BlogPost[];

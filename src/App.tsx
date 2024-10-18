@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import { getAllBlogPosts, getAllProjects, handleApiError } from './api';
 import Home from './components/Home';
-import BlogPost from './components/BlogPost';
-import BlogList from './components/BlogList';
-import Project from './components/Project';
-import ProjectList from './components/ProjectList';
+import BlogPost from './components/Blog/BlogPost';
+import BlogList from './components/Blog/BlogList';
+import ProjectDetails from './components/Project/ProjectDetails';
+import ProjectList from './components/Project/ProjectList';
 import AdminDashboard from './components/AdminDashboard/AdminDashboard';
 import { BlogPost as BlogPostType, Project as ProjectType } from './types';
 import { AuthProvider, useAuth } from './context/AuthContext';
@@ -74,7 +74,7 @@ function App() {
                 <Route path="/blog" element={<BlogList blogPosts={blogPosts} />} />
                 <Route path="/blog/:id" element={<BlogPost />} />
                 <Route path="/projects" element={<ProjectList projects={projects} />} />
-                <Route path="/project/:id" element={<Project />} />
+                <Route path="/project/:id" element={<ProjectDetails />} />
                 <Route path="/admin" element={<ProtectedRoute element={<AdminDashboard />} />} />
               </Routes>
             </div>
