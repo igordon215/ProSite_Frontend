@@ -40,6 +40,10 @@ const Home: React.FC<HomeProps> = ({ blogPosts, projects }) => {
     };
   }, []);
 
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
     <div className="App">
       <header className="header">
@@ -47,7 +51,13 @@ const Home: React.FC<HomeProps> = ({ blogPosts, projects }) => {
           <nav>
             <ul>
               <li style={{ display: 'flex', alignItems: 'center' }}>
-                <img src="/logo.png" alt="IG Codes Logo" className="small-logo" style={{ marginRight: '10px' }} />
+                <img 
+                  src="/logo.png" 
+                  alt="IG Codes Logo" 
+                  className="small-logo" 
+                  style={{ marginRight: '10px', cursor: 'pointer' }} 
+                  onClick={scrollToTop}
+                />
                 <a href="#home">Home</a>
               </li>
               <li><a href="#about">About</a></li>
