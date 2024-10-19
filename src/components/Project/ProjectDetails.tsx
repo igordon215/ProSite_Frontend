@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { getProjectById, handleApiError } from '../../api';
 import { Project as ProjectType } from '../../types';
 import './Projects.css';
+import DOMPurify from 'dompurify';
 
 const ProjectDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -29,6 +30,10 @@ const ProjectDetails: React.FC = () => {
     fetchProject();
   }, [id]);
 
+  const sanitizeHtml = (html: string): string => {
+    return DOMPurify.sanitize(html);
+  };
+
   if (isLoading) {
     return <div className="loading">Loading...</div>;
   }
@@ -45,7 +50,7 @@ const ProjectDetails: React.FC = () => {
     <div className="full-project">
       <h1>{project.name}</h1>
       <div className="content">
-        <p>{project.description}</p>
+        <div dangerouslySetInnerHTML={{ __html: sanitizeHtml(project.description) }} />
         {project.technologies && project.technologies.length > 0 && (
           <div className="technologies">
             <h2>Technologies Used:</h2>

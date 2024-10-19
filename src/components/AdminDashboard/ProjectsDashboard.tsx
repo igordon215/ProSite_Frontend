@@ -3,6 +3,7 @@ import { Project } from '../../types';
 import { createProject, updateProject, deleteProject, handleApiError } from '../../api';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import DOMPurify from 'dompurify';
 
 interface ProjectsDashboardProps {
   projects: Project[];
@@ -15,7 +16,8 @@ const ProjectsDashboard: React.FC<ProjectsDashboardProps> = ({ projects, setProj
   const [newProject, setNewProject] = useState<Omit<Project, 'id' | 'createdAt' | 'updatedAt'>>({
     name: '',
     description: '',
-    technologies: [],
+    liveUrl: '',
+    repoUrl: '',
   });
   const [editingProject, setEditingProject] = useState<Project | null>(null);
   const [updateTrigger, setUpdateTrigger] = useState<number>(0);
@@ -35,7 +37,6 @@ const ProjectsDashboard: React.FC<ProjectsDashboardProps> = ({ projects, setProj
     const optimisticProject: Project = {
       ...newProject,
       id: tempId,
-      title: newProject.name,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
@@ -45,7 +46,7 @@ const ProjectsDashboard: React.FC<ProjectsDashboardProps> = ({ projects, setProj
     try {
       const addedProject = await createProject(optimisticProject);
       setProjects(prevProjects => [...prevProjects, addedProject]);
-      setNewProject({ name: '', description: '', technologies: [] });
+      setNewProject({ name: '', description: '', liveUrl: '', repoUrl: '' });
       forceUpdate();
     } catch (err) {
       setLocalProjects(prevProjects => prevProjects.filter(p => p.id !== tempId));
@@ -59,7 +60,10 @@ const ProjectsDashboard: React.FC<ProjectsDashboardProps> = ({ projects, setProj
     if (!editingProject) return;
     setError(null);
     
-    const updatedProject = { ...editingProject, title: editingProject.name, updatedAt: new Date().toISOString() };
+    const updatedProject = { 
+      ...editingProject, 
+      updatedAt: new Date().toISOString(),
+    };
     
     // Immediately update local state
     setLocalProjects(prevProjects => prevProjects.map(p => p.id === updatedProject.id ? updatedProject : p));
@@ -113,10 +117,13 @@ const ProjectsDashboard: React.FC<ProjectsDashboardProps> = ({ projects, setProj
       day: 'numeric',
       hour: '2-digit',
       minute: '2-digit',
-      second: '2-digit',
       timeZoneName: 'short'
     };
     return date.toLocaleString(undefined, options);
+  };
+
+  const sanitizeHtml = (html: string): string => {
+    return DOMPurify.sanitize(html);
   };
 
   return (
@@ -127,10 +134,9 @@ const ProjectsDashboard: React.FC<ProjectsDashboardProps> = ({ projects, setProj
           <li key={`${project.id}-${project.updatedAt}-${updateTrigger}`} className="item">
             <div className="item-content">
               <div className="item-info">
-                <span className="item-name">{project.name}</span>
-                <span className="item-date">Created: {formatDate(project.createdAt)}</span>
-                <span className="item-date">Updated: {formatDate(project.updatedAt)}</span>
-                <span className="item-technologies">Technologies: {project.technologies?.join(', ') || 'None'}</span>
+                <h3 className="item-name">{project.name}</h3>
+                <p className="item-date">Created: {formatDate(project.createdAt)}</p>
+                <p className="item-date">Updated: {formatDate(project.updatedAt)}</p>
               </div>
               <div className="item-actions">
                 <button onClick={() => setEditingProject(project)}>Edit</button>
@@ -153,9 +159,9 @@ const ProjectsDashboard: React.FC<ProjectsDashboardProps> = ({ projects, setProj
               onChange={(e) => setEditingProject({ ...editingProject, name: e.target.value })}
               required
             />
-            <label htmlFor="edit-project-description">Project Description:</label>
+            <label htmlFor="edit-project-description">Project Description (include Technologies):</label>
             <CKEditor
-              key={editingProject.id} // Add a key prop to force re-render
+              key={editingProject.id}
               editor={ClassicEditor}
               data={editingProject.description}
               onChange={(event, editor) => {
@@ -163,12 +169,19 @@ const ProjectsDashboard: React.FC<ProjectsDashboardProps> = ({ projects, setProj
                 setEditingProject(prevProject => ({ ...prevProject!, description: data }));
               }}
             />
-            <label htmlFor="edit-project-technologies">Technologies (comma-separated):</label>
+            <label htmlFor="edit-project-live-url">Live URL:</label>
             <input
-              id="edit-project-technologies"
+              id="edit-project-live-url"
               type="text"
-              value={editingProject.technologies?.join(', ') || ''}
-              onChange={(e) => setEditingProject({ ...editingProject, technologies: e.target.value.split(',').map(tech => tech.trim()) })}
+              value={editingProject.liveUrl}
+              onChange={(e) => setEditingProject({ ...editingProject, liveUrl: e.target.value })}
+            />
+            <label htmlFor="edit-project-repo-url">Repository URL:</label>
+            <input
+              id="edit-project-repo-url"
+              type="text"
+              value={editingProject.repoUrl}
+              onChange={(e) => setEditingProject({ ...editingProject, repoUrl: e.target.value })}
             />
             <div className="form-buttons">
               <button type="submit">Update Project</button>
@@ -187,7 +200,7 @@ const ProjectsDashboard: React.FC<ProjectsDashboardProps> = ({ projects, setProj
               onChange={(e) => setNewProject({ ...newProject, name: e.target.value })}
               required
             />
-            <label htmlFor="new-project-description">Project Description:</label>
+            <label htmlFor="new-project-description">Project Description (include Technologies):</label>
             <CKEditor
               editor={ClassicEditor}
               data={newProject.description}
@@ -196,13 +209,21 @@ const ProjectsDashboard: React.FC<ProjectsDashboardProps> = ({ projects, setProj
                 setNewProject({ ...newProject, description: data });
               }}
             />
-            <label htmlFor="new-project-technologies">Technologies (comma-separated):</label>
+            <label htmlFor="new-project-live-url">Live URL:</label>
             <input
-              id="new-project-technologies"
+              id="new-project-live-url"
               type="text"
-              placeholder="e.g. React, Node.js, MongoDB"
-              value={newProject.technologies?.join(', ') || ''}
-              onChange={(e) => setNewProject({ ...newProject, technologies: e.target.value.split(',').map(tech => tech.trim()) })}
+              placeholder="Enter live URL"
+              value={newProject.liveUrl}
+              onChange={(e) => setNewProject({ ...newProject, liveUrl: e.target.value })}
+            />
+            <label htmlFor="new-project-repo-url">Repository URL:</label>
+            <input
+              id="new-project-repo-url"
+              type="text"
+              placeholder="Enter repository URL"
+              value={newProject.repoUrl}
+              onChange={(e) => setNewProject({ ...newProject, repoUrl: e.target.value })}
             />
             <button type="submit">Add Project</button>
           </form>
