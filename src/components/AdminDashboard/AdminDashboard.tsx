@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { Project, BlogPost } from '../../types';
 import './AdminDashboard.css';
 import ProjectsDashboard from './ProjectsDashboard';
 import BlogDashboard from './BlogDashboard';
+import { getAllProjects, getAllBlogPosts, handleApiError } from '../../api';
 
 const AdminDashboard: React.FC = () => {
   const { isAuthenticated, logout } = useAuth();
@@ -12,6 +13,32 @@ const AdminDashboard: React.FC = () => {
   const [projects, setProjects] = useState<Project[]>([]);
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
   const [error, setError] = useState<string | null>(null);
+
+  const memoizedSetProjects = useCallback((newProjects: Project[] | ((prevProjects: Project[]) => Project[])) => {
+    setProjects(newProjects);
+  }, []);
+
+  const memoizedSetBlogPosts = useCallback((newBlogPosts: BlogPost[] | ((prevBlogPosts: BlogPost[]) => BlogPost[])) => {
+    setBlogPosts(newBlogPosts);
+  }, []);
+
+  useEffect(() => {
+    const fetchInitialData = async () => {
+      try {
+        const [fetchedProjects, fetchedBlogPosts] = await Promise.all([
+          getAllProjects(),
+          getAllBlogPosts()
+        ]);
+        memoizedSetProjects(fetchedProjects);
+        memoizedSetBlogPosts(fetchedBlogPosts);
+      } catch (err) {
+        setError('Failed to fetch initial data');
+        handleApiError(err);
+      }
+    };
+
+    fetchInitialData();
+  }, [memoizedSetProjects, memoizedSetBlogPosts]);
 
   if (!isAuthenticated) {
     return <Navigate to="/" />;
@@ -30,13 +57,13 @@ const AdminDashboard: React.FC = () => {
       
       <ProjectsDashboard 
         projects={projects}
-        setProjects={setProjects}
+        setProjects={memoizedSetProjects}
         setError={setError}
       />
       
       <BlogDashboard 
         blogPosts={blogPosts}
-        setBlogPosts={setBlogPosts}
+        setBlogPosts={memoizedSetBlogPosts}
         setError={setError}
       />
     </div>
