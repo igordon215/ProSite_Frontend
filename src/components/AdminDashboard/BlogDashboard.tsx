@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { BlogPost } from '../../types';
-import { createBlogPost, getAllBlogPosts, updateBlogPost, deleteBlogPost, handleApiError } from '../../api';
+import { createBlogPost, updateBlogPost, deleteBlogPost, handleApiError } from '../../api';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
@@ -11,40 +11,43 @@ interface BlogDashboardProps {
 }
 
 const BlogDashboard: React.FC<BlogDashboardProps> = ({ blogPosts, setBlogPosts, setError }) => {
+  const [localBlogPosts, setLocalBlogPosts] = useState<BlogPost[]>(blogPosts);
   const [newBlogPost, setNewBlogPost] = useState<Omit<BlogPost, 'id' | 'createdAt' | 'updatedAt' | 'authorId'>>({
     title: '',
     content: '',
   });
   const [editingBlogPost, setEditingBlogPost] = useState<BlogPost | null>(null);
+  const [updateTrigger, setUpdateTrigger] = useState<number>(0);
 
   useEffect(() => {
-    fetchBlogPosts();
-  }, []);
+    setLocalBlogPosts(blogPosts);
+  }, [blogPosts, updateTrigger]);
 
-  const fetchBlogPosts = async () => {
-    try {
-      const fetchedBlogPosts = await getAllBlogPosts();
-      setBlogPosts(fetchedBlogPosts);
-    } catch (err) {
-      setError('Failed to fetch blog posts');
-      handleApiError(err);
-    }
-  };
+  const forceUpdate = useCallback(() => {
+    setUpdateTrigger(prev => prev + 1);
+  }, []);
 
   const handleAddBlogPost = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    const tempId = Date.now();
+    const optimisticBlogPost: BlogPost = {
+      ...newBlogPost,
+      id: tempId,
+      authorId: 'admin',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+    
+    setLocalBlogPosts(prevPosts => [...prevPosts, optimisticBlogPost]);
+    
     try {
-      const blogPostToAdd: Omit<BlogPost, 'id'> = {
-        ...newBlogPost,
-        authorId: 'admin', // Replace with actual author ID if available
-        createdAt: '', // This will be set by the server
-        updatedAt: '', // This will be set by the server
-      };
-      const addedBlogPost = await createBlogPost(blogPostToAdd);
-      setBlogPosts([...blogPosts, addedBlogPost]);
+      const addedBlogPost = await createBlogPost(optimisticBlogPost);
+      setBlogPosts(prevPosts => [...prevPosts, addedBlogPost]);
       setNewBlogPost({ title: '', content: '' });
+      forceUpdate();
     } catch (err) {
+      setLocalBlogPosts(prevPosts => prevPosts.filter(post => post.id !== tempId));
       setError('Failed to add blog post. Please try again.');
       handleApiError(err);
     }
@@ -54,11 +57,20 @@ const BlogDashboard: React.FC<BlogDashboardProps> = ({ blogPosts, setBlogPosts, 
     e.preventDefault();
     if (!editingBlogPost) return;
     setError(null);
+    
+    const updatedPost = { ...editingBlogPost, updatedAt: new Date().toISOString() };
+    
+    // Immediately update local state
+    setLocalBlogPosts(prevPosts => prevPosts.map(post => post.id === updatedPost.id ? updatedPost : post));
+    
     try {
-      const updatedBlogPost = await updateBlogPost(editingBlogPost.id, editingBlogPost);
-      setBlogPosts(blogPosts.map(p => p.id === updatedBlogPost.id ? updatedBlogPost : p));
+      const updatedBlogPost = await updateBlogPost(updatedPost.id, updatedPost);
+      setBlogPosts(prevPosts => prevPosts.map(post => post.id === updatedBlogPost.id ? updatedBlogPost : post));
       setEditingBlogPost(null);
+      forceUpdate();
     } catch (err) {
+      // Revert local state if the update fails
+      setLocalBlogPosts(prevPosts => prevPosts.map(post => post.id === editingBlogPost.id ? blogPosts.find(p => p.id === editingBlogPost.id)! : post));
       setError('Failed to update blog post. Please try again.');
       handleApiError(err);
     }
@@ -66,10 +78,17 @@ const BlogDashboard: React.FC<BlogDashboardProps> = ({ blogPosts, setBlogPosts, 
 
   const handleDeleteBlogPost = async (id: number) => {
     setError(null);
+    const deletedPost = localBlogPosts.find(post => post.id === id);
+    setLocalBlogPosts(prevPosts => prevPosts.filter(post => post.id !== id));
+    
     try {
       await deleteBlogPost(id);
-      setBlogPosts(blogPosts.filter(p => p.id !== id));
+      setBlogPosts(prevPosts => prevPosts.filter(post => post.id !== id));
+      forceUpdate();
     } catch (err) {
+      if (deletedPost) {
+        setLocalBlogPosts(prevPosts => [...prevPosts, deletedPost]);
+      }
       setError('Failed to delete blog post. Please try again.');
       handleApiError(err);
     }
@@ -103,12 +122,13 @@ const BlogDashboard: React.FC<BlogDashboardProps> = ({ blogPosts, setBlogPosts, 
     <div className="admin-section">
       <h2>Blog Posts</h2>
       <ul className="item-list">
-        {blogPosts.map(post => (
-          <li key={post.id} className="item">
+        {localBlogPosts.map(post => (
+          <li key={`${post.id}-${post.updatedAt}-${updateTrigger}`} className="item">
             <div className="item-content">
               <div className="item-info">
                 <span className="item-name">{post.title}</span>
                 <span className="item-date">Created: {formatDate(post.createdAt)}</span>
+                <span className="item-date">Updated: {formatDate(post.updatedAt)}</span>
               </div>
               <div className="item-actions">
                 <button onClick={() => setEditingBlogPost(post)}>Edit</button>
@@ -133,11 +153,12 @@ const BlogDashboard: React.FC<BlogDashboardProps> = ({ blogPosts, setBlogPosts, 
             />
             <label htmlFor="edit-blog-content">Blog Post Content:</label>
             <CKEditor
+              key={editingBlogPost.id} // Add a key prop to force re-render
               editor={ClassicEditor}
               data={editingBlogPost.content}
               onChange={(event, editor) => {
                 const data = editor.getData();
-                setEditingBlogPost({ ...editingBlogPost, content: data });
+                setEditingBlogPost(prevPost => ({ ...prevPost!, content: data }));
               }}
             />
             <div className="form-buttons">

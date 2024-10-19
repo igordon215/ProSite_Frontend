@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { Project } from '../../types';
-import { createProject, getAllProjects, updateProject, deleteProject, handleApiError } from '../../api';
+import { createProject, updateProject, deleteProject, handleApiError } from '../../api';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
@@ -11,41 +11,44 @@ interface ProjectsDashboardProps {
 }
 
 const ProjectsDashboard: React.FC<ProjectsDashboardProps> = ({ projects, setProjects, setError }) => {
+  const [localProjects, setLocalProjects] = useState<Project[]>(projects);
   const [newProject, setNewProject] = useState<Omit<Project, 'id' | 'createdAt' | 'updatedAt'>>({
     name: '',
     description: '',
     technologies: [],
   });
   const [editingProject, setEditingProject] = useState<Project | null>(null);
+  const [updateTrigger, setUpdateTrigger] = useState<number>(0);
 
   useEffect(() => {
-    fetchProjects();
-  }, []);
+    setLocalProjects(projects);
+  }, [projects, updateTrigger]);
 
-  const fetchProjects = async () => {
-    try {
-      const fetchedProjects = await getAllProjects();
-      setProjects(fetchedProjects);
-    } catch (err) {
-      setError('Failed to fetch projects');
-      handleApiError(err);
-    }
-  };
+  const forceUpdate = useCallback(() => {
+    setUpdateTrigger(prev => prev + 1);
+  }, []);
 
   const handleAddProject = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    const tempId = Date.now();
+    const optimisticProject: Project = {
+      ...newProject,
+      id: tempId,
+      title: newProject.name,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+    
+    setLocalProjects(prevProjects => [...prevProjects, optimisticProject]);
+    
     try {
-      const projectToAdd: Omit<Project, 'id'> = {
-        ...newProject,
-        title: newProject.name,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      };
-      const addedProject = await createProject(projectToAdd);
-      setProjects([...projects, addedProject]);
+      const addedProject = await createProject(optimisticProject);
+      setProjects(prevProjects => [...prevProjects, addedProject]);
       setNewProject({ name: '', description: '', technologies: [] });
+      forceUpdate();
     } catch (err) {
+      setLocalProjects(prevProjects => prevProjects.filter(p => p.id !== tempId));
       setError('Failed to add project. Please try again.');
       handleApiError(err);
     }
@@ -55,14 +58,20 @@ const ProjectsDashboard: React.FC<ProjectsDashboardProps> = ({ projects, setProj
     e.preventDefault();
     if (!editingProject) return;
     setError(null);
+    
+    const updatedProject = { ...editingProject, title: editingProject.name, updatedAt: new Date().toISOString() };
+    
+    // Immediately update local state
+    setLocalProjects(prevProjects => prevProjects.map(p => p.id === updatedProject.id ? updatedProject : p));
+    
     try {
-      const updatedProject = await updateProject(editingProject.id, {
-        ...editingProject,
-        title: editingProject.name,
-      });
-      setProjects(projects.map(p => p.id === updatedProject.id ? updatedProject : p));
+      const updatedProjectFromServer = await updateProject(updatedProject.id, updatedProject);
+      setProjects(prevProjects => prevProjects.map(p => p.id === updatedProjectFromServer.id ? updatedProjectFromServer : p));
       setEditingProject(null);
+      forceUpdate();
     } catch (err) {
+      // Revert the change if the API call fails
+      setLocalProjects(prevProjects => prevProjects.map(p => p.id === editingProject.id ? projects.find(proj => proj.id === editingProject.id)! : p));
       setError('Failed to update project. Please try again.');
       handleApiError(err);
     }
@@ -70,10 +79,17 @@ const ProjectsDashboard: React.FC<ProjectsDashboardProps> = ({ projects, setProj
 
   const handleDeleteProject = async (id: number) => {
     setError(null);
+    const deletedProject = localProjects.find(p => p.id === id);
+    setLocalProjects(prevProjects => prevProjects.filter(p => p.id !== id));
+    
     try {
       await deleteProject(id);
-      setProjects(projects.filter(p => p.id !== id));
+      setProjects(prevProjects => prevProjects.filter(p => p.id !== id));
+      forceUpdate();
     } catch (err) {
+      if (deletedProject) {
+        setLocalProjects(prevProjects => [...prevProjects, deletedProject]);
+      }
       setError('Failed to delete project. Please try again.');
       handleApiError(err);
     }
@@ -107,12 +123,14 @@ const ProjectsDashboard: React.FC<ProjectsDashboardProps> = ({ projects, setProj
     <div className="admin-section">
       <h2>Projects</h2>
       <ul className="item-list">
-        {projects.map(project => (
-          <li key={project.id} className="item">
+        {localProjects.map(project => (
+          <li key={`${project.id}-${project.updatedAt}-${updateTrigger}`} className="item">
             <div className="item-content">
               <div className="item-info">
                 <span className="item-name">{project.name}</span>
                 <span className="item-date">Created: {formatDate(project.createdAt)}</span>
+                <span className="item-date">Updated: {formatDate(project.updatedAt)}</span>
+                <span className="item-technologies">Technologies: {project.technologies?.join(', ') || 'None'}</span>
               </div>
               <div className="item-actions">
                 <button onClick={() => setEditingProject(project)}>Edit</button>
@@ -137,11 +155,12 @@ const ProjectsDashboard: React.FC<ProjectsDashboardProps> = ({ projects, setProj
             />
             <label htmlFor="edit-project-description">Project Description:</label>
             <CKEditor
+              key={editingProject.id} // Add a key prop to force re-render
               editor={ClassicEditor}
               data={editingProject.description}
               onChange={(event, editor) => {
                 const data = editor.getData();
-                setEditingProject({ ...editingProject, description: data });
+                setEditingProject(prevProject => ({ ...prevProject!, description: data }));
               }}
             />
             <label htmlFor="edit-project-technologies">Technologies (comma-separated):</label>
