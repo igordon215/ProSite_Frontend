@@ -15,10 +15,13 @@ const Projects: React.FC<ProjectsProps> = ({ projects }) => {
         {projects.slice(0, 4).map((project) => (
           <div key={project.id} className="project-card">
             <h3>{project.name}</h3>
-            <p>{project.description}</p>
+            <div 
+              className="project-description"
+              dangerouslySetInnerHTML={{ __html: project.description }}
+            />
             {project.technologies && project.technologies.length > 0 && (
               <div className="tech-stack">
-                {project.technologies.map((tech, index) => (
+                {project.technologies.map((tech: string, index: number) => (
                   <span key={index} className="tech-tag">{tech}</span>
                 ))}
               </div>

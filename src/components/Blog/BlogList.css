@@ -24,6 +24,9 @@
   padding: 1.5rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  max-height: 300px;
 }
 
 .blog-card:hover {
@@ -36,9 +39,25 @@
   color: #F54E37;
 }
 
-.blog-card p {
+.blog-content {
   margin-bottom: 1rem;
   color: #ffffff;
+  flex-grow: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+/* Style HTML content within blog content */
+.blog-content p {
+  margin: 0;
+  color: #ffffff;
+}
+
+.blog-content br {
+  display: none;
 }
 
 .blog-date {
@@ -57,6 +76,7 @@
   text-decoration: none;
   font-weight: 600;
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  margin-top: auto;
 }
 
 .view-more:hover {

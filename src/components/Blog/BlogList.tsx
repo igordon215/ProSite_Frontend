@@ -59,7 +59,10 @@ const BlogList: React.FC<BlogListProps> = ({ blogPosts }) => {
               <div key={post.id} className="blog-card">
                 <h3>{post.title}</h3>
                 <p className="blog-date">Created on: {formatDate(post.createdAt)}</p>
-                <p>{post.content.substring(0, 100)}...</p>
+                <div 
+                  className="blog-content"
+                  dangerouslySetInnerHTML={{ __html: post.content }}
+                />
                 <Link to={`/blog/${post.id}`} className="view-more">Read Full Article</Link>
               </div>
             ))}

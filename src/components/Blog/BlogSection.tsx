@@ -15,7 +15,10 @@ const BlogSection: React.FC<BlogSectionProps> = ({ blogPosts }) => {
         {blogPosts.slice(0, 4).map((post) => (
           <div key={post.id} className="blog-card">
             <h3>{post.title}</h3>
-            <p>{post.content.substring(0, 100)}...</p>
+            <div 
+              className="blog-content"
+              dangerouslySetInnerHTML={{ __html: post.content }}
+            />
             <Link to={`/blog/${post.id}`} className="read-more">Explore Full Article</Link>
           </div>
         ))}
